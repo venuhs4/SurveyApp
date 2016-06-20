@@ -198,6 +198,10 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\SurveyGroupsController.cs" />
+    <Compile Include="Controllers\SurveyProctorController.cs" />
+    <Compile Include="Controllers\SurveyResultController.cs" />
+    <Compile Include="Controllers\SurveysController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -212,6 +216,10 @@
     <Compile Include="Migrations\201606200745151_Added initial tables.cs" />
     <Compile Include="Migrations\201606200745151_Added initial tables.Designer.cs">
       <DependentUpon>201606200745151_Added initial tables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606200810373_added table relations.cs" />
+    <Compile Include="Migrations\201606200810373_added table relations.Designer.cs">
+      <DependentUpon>201606200810373_added table relations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -284,6 +292,18 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Surveys\Create.cshtml" />
+    <Content Include="Views\Surveys\Delete.cshtml" />
+    <Content Include="Views\Surveys\Details.cshtml" />
+    <Content Include="Views\Surveys\Edit.cshtml" />
+    <Content Include="Views\Surveys\Index.cshtml" />
+    <Content Include="Views\SurveyGroups\Create.cshtml" />
+    <Content Include="Views\SurveyGroups\Delete.cshtml" />
+    <Content Include="Views\SurveyGroups\Details.cshtml" />
+    <Content Include="Views\SurveyGroups\Edit.cshtml" />
+    <Content Include="Views\SurveyGroups\Index.cshtml" />
+    <Content Include="Views\SurveyProctor\Index.cshtml" />
+    <Content Include="Views\SurveyResult\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -305,6 +325,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606200745151_Added initial tables.resx">
       <DependentUpon>201606200745151_Added initial tables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606200810373_added table relations.resx">
+      <DependentUpon>201606200810373_added table relations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
