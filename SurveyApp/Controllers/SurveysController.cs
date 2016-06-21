@@ -20,6 +20,17 @@ namespace SurveyApp.Controllers
             return View(db.TSurvey.ToList());
         }
 
+        public ActionResult AllDetails()
+        {
+            return View();
+        }
+
+        public JsonResult GetAllSurveyGroups()
+        {
+            //var groups = from g in db.TSurveyGroup
+            //             select new { Name = g.N}
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
         // GET: Surveys/Details/5
         public ActionResult Details(long? id)
         {

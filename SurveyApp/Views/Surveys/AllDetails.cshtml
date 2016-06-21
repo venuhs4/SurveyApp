@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="allDetails" ng-controller="allDetailsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">All Surveys Details</h1>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                List of Surveys
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Survey Details
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>
+<script>
+    var app = angular.module('allDetailApp', []);
+    app.controller('allDetailsCtrl', ['$http', '$scope', function ($http, $scope) {
+        console.log('allDetailsCtrl');
+    }]);
+    angular.bootstrap($('#allDetails'), ['allDetailApp']);
+</script>

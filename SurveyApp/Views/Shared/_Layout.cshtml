@@ -4,40 +4,123 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Survey Application</title>
-    @Styles.Render("~/Content/css")
+    @*@Styles.Render("~/Content/css")*@
     @Scripts.Render("~/bundles/modernizr")
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/angularjs")
+    @Styles.Render("~/Content/adminUI")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Survey App", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("Survey Master", "Index", "Surveys")</li>
-                        <li>@Html.ActionLink("Survey Proctor", "Index", "SurveyProctor")</li>
-                        <li>@Html.ActionLink("Survey Results", "Index", "SurveyResult")</li>
-                        <li>@Html.ActionLink("Survey Groups", "Index", "SurveyGroups")</li>
-                    }
-                </ul>
-               
-                @Html.Partial("_LoginPartial")
-            </div>
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Survey App</a>
         </div>
-    </div>
-    <div class="container body-content">
+        <!-- /.navbar-header -->
+
+        <ul class="nav navbar-top-links navbar-right" id="logoutForm">
+            @using Microsoft.AspNet.Identity
+            @if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <li>
+                        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><input type="submit" value="Log Out" class="btn btn-success" /></li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                }
+            }
+            else
+            {
+                <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+            }
+
+        </ul>
+
+
+        <!-- /.navbar-top-links -->
+
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav in" id="side-menu">
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </li>
+                    <li>
+                        <a href="index.html" class="active"><i class="fa fa-dashboard fa-fw"></i> Survey Dashboards</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-shield"></i> Survey Master<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                @Html.ActionLink("Create New Survey", "Create", "Surveys");
+                            </li>
+                            <li>
+                                @Html.ActionLink("All Survey", "Index", "Surveys");
+                            </li>
+                            <li>
+                                @Html.ActionLink(" All Surveys Details", "AllDetails", "Surveys");
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-book"></i> Survey Procton<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="flot.html">Take A Survey</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-group"></i> Survey Groups<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="flot.html">Create New Survey Group</a>
+                            </li>
+                            <li>
+                                <a href="morris.html">All Serveys Groups</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+    <div id="page-wrapper">
         @RenderBody()
         <hr />
         <footer>
@@ -45,8 +128,9 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+   
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+    @Scripts.Render("~/bundles/adminUI")
     @RenderSection("scripts", required: false)
 </body>
 </html>

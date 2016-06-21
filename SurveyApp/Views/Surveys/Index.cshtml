@@ -5,12 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">All Surveys</h1>
+    </div>
+</div>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table table-bordered table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Duty)
