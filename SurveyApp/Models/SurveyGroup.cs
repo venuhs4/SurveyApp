@@ -1,9 +1,12 @@
-﻿namespace SurveyApp.Models
+﻿using System.Collections.Generic;
+
+namespace SurveyApp.Models
 {
     public class SurveyGroup
     {
         public long SurveyGroupId { get; set; }
-        public string SurveyName { get; set; }
-        public long SurveyId { get; set; }
+        public string SurveyGroupName { get; set; }
+
+        public ICollection<SurveyGroupMap> SurveyGroupsMap { get; set; }
     }
 }

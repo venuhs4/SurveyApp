@@ -13,8 +13,8 @@ namespace SurveyApp.Models
         public string Description { get; set; }
         public string LinkId { get; set; }
 
-        public ICollection<SurveyDetail> SurveyDetails { get; set; }
+        public ICollection<SurveyDetail> SurveyDetailM { get; set; }
         public ICollection<SurveyResult> SurveyResults { get; set; }
-        public ICollection<SurveyGroup> SurveyGroups { get; set; }
+        public ICollection<SurveyGroupMap> SurveyGroupsMap { get; set; }
     }
 }

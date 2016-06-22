@@ -9,13 +9,42 @@
         </div>
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-4">
         <div class="panel panel-default">
             <div class="panel-heading">
                 List of Surveys
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label">Survey Group</label>
+                    <select class="form-control" ng-model="data.groupId" ng-options="g.Id as g.Name for g in groups" ng-change="GetSurveyByGroup()"></select>
+                </div>
+
+                <div>
+                    <table class="table table-hover" ng-if="surveys.length !=0">
+                        <thead>
+                            <tr style="background-color:#f5f5f5">
+                                <td>
+                                    #
+                                </td>
+                                <td>
+                                    Survey Name
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody style="cursor:pointer">
+                            <tr ng-repeat="a in surveys" ng-click="GetSurveyDetails($event,a)">
+                                <td>
+                                    {{$index + 1}}
+                                </td>
+                                <td>
+                                    {{a.Name}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
             <!-- /.panel-body -->
@@ -23,24 +52,199 @@
         <!-- /.panel -->
     </div>
 
-    <div class="col-lg-6">
-        <div class="panel panel-default">
+    <div class="col-lg-8">
+        <div class="panel panel-default" ng-show="selectedSurvey != 'none'">
             <div class="panel-heading">
                 Survey Details
+                <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#detailModal">New Survey Detail</button>
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
+                <!-- Modal -->
+                <div id="detailModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">New Survey Detail</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label>Type</label>
+                                            <select class="form-control" ng-model="surveyDetail.Type" ng-options="s.Id as s.Name for s in serveyTypes"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Prompt</label>
+                                            <textarea class="form-control" ng-model="surveyDetail.Prompt" rows="3"></textarea>
+                                        </div>
+                                        <div ng-show="surveyDetail.Type == 2">
+                                            <div class="form-group">
+                                                <form class="form-inline">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary btn-sm" ng-click="addDetailItem()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox">
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only"></label>
+                                                        <input type="text" class="form-control" ng-model="detailItem">
+                                                    </div>
 
+                                                </form>
+                                            </div>
+                                            <div class="form-group" ng-repeat="i in surveyDetail.items">
+                                                <form class="form-inline">
+                                                    <button type="submit" class="btn btn-danger btn-sm" ng-click="removeDetailItem($index,i)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox">
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only"></label>
+                                                        {{i}}
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <div ng-show="surveyDetail.Type == 1">
+                                            <div class="form-group">
+                                                <form class="form-inline">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary btn-sm" ng-click="addDetailItem()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio">
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only"></label>
+                                                        <input type="text" class="form-control" ng-model="detailItem">
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                            <div class="form-group" ng-repeat="i in surveyDetail.items">
+                                                <form class="form-inline">
+                                                    <button type="submit" class="btn btn-danger btn-sm" ng-click="removeDetailItem($index,i)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio">
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only"></label>
+                                                        {{i}}
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+
+                                        </div>
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary btn-sm" ng-click="addSurveyDetails()">Add Survey Detail</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.panel -->
+                <div class="panel panel-default" ng-repeat="d in surveyDetails">
+                    <div class="panel-body">
+                        <div class="col-md-3"><b>Prompt</b></div>
+                        <div class="col-md-9">{{d.Prompt}}</div>
+                        <hr />
+                        <div ng-if="d.Type == 1 || d.Type ==2">
+                            <div class="col-md-3"><b>Answers</b></div>
+                            <div class="col-md-9">
+                                <div class="{{d.Type == 1? 'radio':'checkbox'}}" ng-repeat="di in d.DelimitedItemList.split(';;')">
+                                    <label>
+                                        <input name="radio" type="{{d.Type == 1? 'radio':'checkbox'}}">
+                                        {{di}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.panel-body -->
         </div>
-        <!-- /.panel -->
-    </div>
-</div>
-<script>
-    var app = angular.module('allDetailApp', []);
-    app.controller('allDetailsCtrl', ['$http', '$scope', function ($http, $scope) {
-        console.log('allDetailsCtrl');
-    }]);
-    angular.bootstrap($('#allDetails'), ['allDetailApp']);
-</script>
+        <script>
+            var app = angular.module('allDetailApp', []);
+            app.controller('allDetailsCtrl', ['$http', '$scope', function ($http, $scope) {
+                $scope.groups = [];
+                $scope.surveys = [];
+                $scope.surveyDetail = { items: [] };
+                $scope.detailItem = "";
+                $scope.surveyDetails = [];
+                $scope.data = {};
+                $scope.selectedSurvey = "none";
+                $scope.serveyTypes = [];
+                $http.get('@Url.Action("GetAllSurveyGroups")').then(function (res) {
+                    $scope.groups = [{ Name: 'All Surveys', Id: 0 }];
+                    $scope.groups = $scope.groups.concat(res.data);
+                });
+                $http.get('@Url.Action("GetServeyTypes")').then(function (res) {
+                    debugger;
+                    $scope.serveyTypes = res.data;
+                });
+                $scope.GetSurveyByGroup = function () {
+                    $http.post('@Url.Action("GetSurveyByGroup")', { id: $scope.data.groupId }).then(function (res) {
+                        $scope.surveys = res.data;
+                    });
+                };
+                $scope.GetSurveyDetails = function ($event, survey) {
+                    $scope.selectedSurvey = survey;
+                    $($event.currentTarget).siblings().removeClass('row-selected');
+                    $($event.currentTarget).addClass('row-selected');
+                    $http.post('@Url.Action("GetSurveyDetails")', { id: survey.Id }).then(function (res) {
+                        $scope.surveyDetails = res.data;
+                    });
+                };
+                $scope.addSurveyDetails = function () {
+
+                    var obj = {
+                        SurveyId: $scope.selectedSurvey.Id,
+                        Prompt: $scope.surveyDetail.Prompt,
+                        DelimitedItemList: $scope.surveyDetail.Type != 0 ? $scope.surveyDetail.items.join(";;") : "",
+                        Type: $scope.surveyDetail.Type
+                    };
+
+                    $http.post('@Url.Action("AddSurveyDetail")', obj).then(function (res) {
+                        console.log(res);
+                    });
+
+                    $scope.surveyDetails.push(obj);
+                };
+                $scope.addDetailItem = function () {
+                    debugger;
+                    if (!!$scope.detailItem && $scope.surveyDetail.items.filter(function (e) { return e == $scope.detailItem; }).length == 0) {
+                        $scope.surveyDetail.items.push($scope.detailItem);
+                    }
+                };
+                $scope.removeDetailItem = function (index, item) {
+                    $scope.surveyDetail.items.splice(index, 1);
+                }
+            }]);
+            angular.bootstrap($('#allDetails'), ['allDetailApp']);
+        </script>
+        <style>
+            .row-selected {
+                background-color: #56acdb !important;
+            }
+        </style>

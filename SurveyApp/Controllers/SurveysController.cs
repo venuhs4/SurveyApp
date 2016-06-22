@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SurveyApp.Models;
+using Newtonsoft.Json;
 
 namespace SurveyApp.Controllers
 {
@@ -22,15 +23,66 @@ namespace SurveyApp.Controllers
 
         public ActionResult AllDetails()
         {
+            ViewBag.ServeyTypes = SurveyDetail.GetServeyTypes();
             return View();
+        }
+
+        public JsonResult GetServeyTypes()
+        {
+            return Json(SurveyDetail.GetServeyTypes().Select(s=> new { Id = s.Key, Name = s.Value }).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetSurveyDetails(long id)
+        {
+            var list = (from d in db.TSurveyDetail
+                       where d.SurveyId == id
+                       select new {
+                           d.SurveyId,
+                           d.SurveyDetailId,
+                           d.Type,
+                           d.DependentItemID,
+                           d.Dependancy,
+                           d.Dependent,
+                           d.DelimitedItemList,
+                           d.Prompt
+                       }).ToList();
+            return Json(list , JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddSurveyDetail(SurveyDetail detail)
+        {
+            db.TSurveyDetail.Add(detail);
+            db.SaveChanges();
+            return Json("Added", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAllSurveyGroups()
         {
-            //var groups = from g in db.TSurveyGroup
-            //             select new { Name = g.N}
+            //var groups = (from g in db.TSurveyGroup
+            //              select new { Name = g.SurveyGroupName, Id = g.SurveyId }).ToList();
             return Json("", JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetSurveyByGroup(long id)
+        {
+            if (id == 0)
+            {
+                var groups = (from s in db.TSurvey
+                              select new { Name = s.Title, Id = s.SurveyId }).ToList();
+                return Json(groups, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                //var groups = (from s in db.TSurvey
+                //              join g in db.TSurveyGroup on s.SurveyId equals g.SurveyId
+                //              where g.SurveyGroupId == id
+                //              select new { Name = s.Title, Id = s.SurveyId }).ToList();
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
         // GET: Surveys/Details/5
         public ActionResult Details(long? id)
         {

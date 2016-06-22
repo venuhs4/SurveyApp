@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Survey Groups</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -13,7 +13,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SurveyId)
+            @Html.DisplayNameFor(model => model.SurveyGroupName)
         </th>
         <th></th>
     </tr>
@@ -21,7 +21,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.SurveyId)
+            @Html.DisplayFor(modelItem => item.SurveyGroupName)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.SurveyGroupId }) |

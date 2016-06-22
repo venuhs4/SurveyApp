@@ -79,19 +79,19 @@
                         <!-- /input-group -->
                     </li>
                     <li>
-                        <a href="index.html" class="active"><i class="fa fa-dashboard fa-fw"></i> Survey Dashboards</a>
+                        <a href="/" class="active"><i class="fa fa-dashboard fa-fw"></i> Survey Dashboards</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-shield"></i> Survey Master<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                @Html.ActionLink("Create New Survey", "Create", "Surveys");
+                                @Html.ActionLink("Create New Survey", "Create", "Surveys")
                             </li>
                             <li>
-                                @Html.ActionLink("All Survey", "Index", "Surveys");
+                                @Html.ActionLink("All Survey", "Index", "Surveys")
                             </li>
                             <li>
-                                @Html.ActionLink(" All Surveys Details", "AllDetails", "Surveys");
+                                @Html.ActionLink(" All Surveys Details", "AllDetails", "Surveys")
                             </li>
                         </ul>
                     </li>
@@ -107,10 +107,10 @@
                         <a href="#"><i class="fa fa-group"></i> Survey Groups<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                <a href="flot.html">Create New Survey Group</a>
+                                @Html.ActionLink("Create Survey Group", "CreateAll", "SurveyGroups")
                             </li>
                             <li>
-                                <a href="morris.html">All Serveys Groups</a>
+                                @Html.ActionLink(" All Surveys Groups", "Index", "SurveyGroups")
                             </li>
                         </ul>
                     </li>

@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "CreateAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="newGroup" ng-controller="newGroupCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Manage Survey Groups</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                New Group
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label">Group Name</label>
+                    <input type="text" class="form-control" ng-model="data.GroupName" />
+                </div>
+                <div>
+                    <table class="table table-hover" ng-if="surveys.length !=0">
+                        <thead>
+                            <tr style="background-color:#f5f5f5">
+                                <td>
+                                    #
+                                </td>
+                                <td>
+                                    Survey Name
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody style="cursor:pointer">
+                            <tr ng-repeat="a in surveys">
+                                <td>
+                                    {{$index + 1}}
+                                </td>
+                                <td>
+                                    {{a.Name}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                All Surveys
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                sdf
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var app = angular.module('newGroupApp', []);
+    app.controller('newGroupCtrl', ['$scope', '$http', function ($scope, $http) {
+        $scope.data = {};
+        $scope.surveys = [];
+        $http.get('@Url.Action("GetAllSurvey")').then(function (res) {
+
+        });
+    }]);
+    angular.bootstrap($('#newGroup'), ['newGroupApp']);
+</script>

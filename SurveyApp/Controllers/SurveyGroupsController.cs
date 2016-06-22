@@ -20,6 +20,11 @@ namespace SurveyApp.Controllers
             return View(db.TSurveyGroup.ToList());
         }
 
+        public ActionResult CreateAll()
+        {
+            return View();
+        }
+
         // GET: SurveyGroups/Details/5
         public ActionResult Details(long? id)
         {
@@ -46,7 +51,7 @@ namespace SurveyApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SurveyGroupId,SurveyId")] SurveyGroup surveyGroup)
+        public ActionResult Create([Bind(Include = "SurveyGroupId,SurveyGroupName")] SurveyGroup surveyGroup)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +83,7 @@ namespace SurveyApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SurveyGroupId,SurveyId")] SurveyGroup surveyGroup)
+        public ActionResult Edit([Bind(Include = "SurveyGroupId,SurveyGroupName")] SurveyGroup surveyGroup)
         {
             if (ModelState.IsValid)
             {
