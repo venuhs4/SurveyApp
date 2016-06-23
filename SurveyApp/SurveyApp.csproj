@@ -1076,6 +1076,7 @@
     <Content Include="bower_components\startbootstrap-sb-admin-2\LICENSE" />
     <Content Include="bower_components\startbootstrap-sb-admin-2\README.md" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Custom\custom-alerts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

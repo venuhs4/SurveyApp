@@ -25,6 +25,33 @@ namespace SurveyApp.Controllers
             return View();
         }
 
+        public JsonResult GetAllSurvey()
+        {
+            var surveys = (from s in db.TSurvey
+                           select new { Title = s.Title, SurveyId = s.SurveyId }).ToList();
+            return Json(surveys, JsonRequestBehavior.AllowGet);
+        }
+        
+        public JsonResult SaveGroup(string groupName,List<Survey> surveys)
+        {
+            var surveyGroup = new SurveyGroup() {
+                SurveyGroupName = groupName
+            };
+            db.TSurveyGroup.Add(surveyGroup);
+            db.SaveChanges();
+
+            foreach (var item in surveys)
+            {
+                db.TSurveyGroupMap.Add(new SurveyGroupMap() {
+                    SurveyId = item.SurveyId,
+                    SurveyGroupId = surveyGroup.SurveyGroupId
+                });
+                db.SaveChanges();
+            }
+
+            return Json("Saved", JsonRequestBehavior.AllowGet);
+        }
+
         // GET: SurveyGroups/Details/5
         public ActionResult Details(long? id)
         {

@@ -22,30 +22,15 @@
                     <label class="control-label">Group Name</label>
                     <input type="text" class="form-control" ng-model="data.GroupName" />
                 </div>
-                <div>
-                    <table class="table table-hover" ng-if="surveys.length !=0">
-                        <thead>
-                            <tr style="background-color:#f5f5f5">
-                                <td>
-                                    #
-                                </td>
-                                <td>
-                                    Survey Name
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody style="cursor:pointer">
-                            <tr ng-repeat="a in surveys">
-                                <td>
-                                    {{$index + 1}}
-                                </td>
-                                <td>
-                                    {{a.Name}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="list-group" ng-if="selectedSurveys.length !=0">
+                    <div class="list-group-item" ng-repeat="a in selectedSurveys">
+                        <button class="btn btn-danger btn-sm" ng-click="removeFromGroup(a)"><span class="glyphicon glyphicon-minus"></span></button>
+                        <a href="#">
+                            {{a.Title}}
+                        </a>
+                    </div>
                 </div>
+                <button class="btn btn-primary" ng-click="saveGroup()">Save Group</button>
             </div>
         </div>
     </div>
@@ -56,7 +41,14 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                sdf
+                <div class="list-group" ng-if="surveys.length !=0">
+                    <div class="list-group-item" ng-repeat="a in surveys">
+                        <button class="btn btn-primary btn-sm" ng-click="addToGroup(a)"><span class="glyphicon glyphicon-plus"></span></button>
+                        <a href="#">
+                            {{a.Title}}
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -66,9 +58,34 @@
     app.controller('newGroupCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.data = {};
         $scope.surveys = [];
+        $scope.selectedSurveys = [];
         $http.get('@Url.Action("GetAllSurvey")').then(function (res) {
-
+            $scope.surveys = res.data;
         });
+        $scope.addToGroup = function (item) {
+            debugger;
+            $scope.selectedSurveys.push(item);
+            $scope.surveys.splice($scope.surveys.indexOf(item), 1);
+        };
+        $scope.removeFromGroup = function (item) {
+            debugger;
+            $scope.surveys.push(item);
+            $scope.selectedSurveys.splice($scope.selectedSurveys.indexOf(item), 1);
+        };
+        $scope.saveGroup = function () {
+            if (!!$scope.data.GroupName && $scope.selectedSurveys.length > 0) {
+                $http.post('@Url.Action("SaveGroup")', { groupName: $scope.data.GroupName, surveys: $scope.selectedSurveys }).then(function (res) {
+                    console.log(res.data);
+                    $scope.data.GroupName = "";
+                    $scope.surveys = $scope.surveys.concat($scope.selectedSurveys);
+                    $scope.selectedSurveys = [];
+                });
+            }
+            else
+            {
+
+            }
+        };
     }]);
     angular.bootstrap($('#newGroup'), ['newGroupApp']);
 </script>

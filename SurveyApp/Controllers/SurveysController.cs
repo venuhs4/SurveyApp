@@ -58,9 +58,9 @@ namespace SurveyApp.Controllers
 
         public JsonResult GetAllSurveyGroups()
         {
-            //var groups = (from g in db.TSurveyGroup
-            //              select new { Name = g.SurveyGroupName, Id = g.SurveyId }).ToList();
-            return Json("", JsonRequestBehavior.AllowGet);
+            var groups = (from g in db.TSurveyGroup
+                          select new { Name = g.SurveyGroupName, Id = g.SurveyGroupId }).ToList();
+            return Json(groups, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetSurveyByGroup(long id)
@@ -73,11 +73,11 @@ namespace SurveyApp.Controllers
             }
             else
             {
-                //var groups = (from s in db.TSurvey
-                //              join g in db.TSurveyGroup on s.SurveyId equals g.SurveyId
-                //              where g.SurveyGroupId == id
-                //              select new { Name = s.Title, Id = s.SurveyId }).ToList();
-                return Json("", JsonRequestBehavior.AllowGet);
+                var groups = (from s in db.TSurvey
+                              join m in db.TSurveyGroupMap on s.SurveyId equals m.SurveyId
+                              where m.SurveyGroupId == id
+                              select new { Name = s.Title, Id = s.SurveyId }).ToList();
+                return Json(groups, JsonRequestBehavior.AllowGet);
             }
         }
 
