@@ -29,32 +29,67 @@ namespace SurveyApp.Controllers
 
         public JsonResult GetServeyTypes()
         {
-            return Json(SurveyDetail.GetServeyTypes().Select(s=> new { Id = s.Key, Name = s.Value }).ToList(), JsonRequestBehavior.AllowGet);
+            return Json(SurveyDetail.GetServeyTypes().Select(s => new { Id = s.Key, Name = s.Value }).ToList(), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetSurveyDetails(long id)
         {
-            Success("Got the Survey details", true);
             var list = (from d in db.TSurveyDetail
-                       where d.SurveyId == id
-                       select new {
-                           d.SurveyId,
-                           d.SurveyDetailId,
-                           d.Type,
-                           d.DependentItemID,
-                           d.Dependancy,
-                           d.Dependent,
-                           d.DelimitedItemList,
-                           d.Prompt
-                       }).ToList();
-            return Json(list , JsonRequestBehavior.AllowGet);
+                        where d.SurveyId == id
+                        orderby d.SortingIndex ascending
+                        select new
+                        {
+                            d.SurveyId,
+                            d.SurveyDetailId,
+                            d.SortingIndex,
+                            d.Type,
+                            d.DependentItemID,
+                            d.Dependancy,
+                            d.Dependent,
+                            d.DelimitedItemList,
+                            d.Prompt
+                        }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddSurveyDetail(SurveyDetail detail)
+        public JsonResult OrderIndexUpdate(List<SurveyDetail> surveys)
+        {
+            foreach (var item in surveys)
+            {
+                var survey = db.TSurveyDetail.Where(s => s.SurveyDetailId == item.SurveyDetailId).FirstOrDefault();
+                if (surveys != null)
+                {
+                    survey.SortingIndex = item.SortingIndex;
+                    db.Entry(survey).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+
+            return Json("Order Index saved", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddSurveyDetail(SurveyDetail detail, long id)
         {
             db.TSurveyDetail.Add(detail);
             db.SaveChanges();
-            return Json("Added", JsonRequestBehavior.AllowGet);
+
+            var list = (from d in db.TSurveyDetail
+                        where d.SurveyId == id
+                        orderby d.SortingIndex ascending
+                        select new
+                        {
+                            d.SurveyId,
+                            d.SurveyDetailId,
+                            d.SortingIndex,
+                            d.Type,
+                            d.DependentItemID,
+                            d.Dependancy,
+                            d.Dependent,
+                            d.DelimitedItemList,
+                            d.Prompt
+                        }).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAllSurveyGroups()

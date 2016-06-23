@@ -169,10 +169,9 @@
                 </div>
                 <!-- /.panel -->
                 <div id="sortable">
-                    <div id="99"></div>
-                    <div class="panel panel-default" ng-repeat="d in surveyDetails" id="{{d.}}">
+                    <div class="panel panel-default" ng-repeat="d in surveyDetails" id="{{$index}}">
                         <div class="panel-body">
-                            <div class="col-md-3"><b>Prompt</b></div>
+                            <div class="col-md-3"><b>Prompt({{d.SortingIndex}})</b></div>
                             <div class="col-md-9">{{d.Prompt}}</div>
                             <hr />
                             <div ng-if="d.Type == 1 || d.Type ==2">
@@ -205,9 +204,16 @@
 
                 $("#sortable").sortable({
                     axis: "y",
-                    opacity: 0.5,
-                    change: function (event, ui) {
-                        console.log($("#sortable").sortable("toArray"));
+                    opacity: 0.7,
+                    update: function (event, ui) {
+                        debugger;
+                        var sortOrder = $("#sortable").sortable("toArray");
+                        sortOrder.forEach(function (ele, index) {
+                            $scope.surveyDetails[parseInt(ele)].SortingIndex = index;
+                        });
+                        $http.post('@Url.Action("OrderIndexUpdate")', { surveys: $scope.surveyDetails }).then(function (res) {
+                            successAlert("Ordered Items...");
+                        }, httpError);
                     }
                 });
                 $("#sortable").disableSelection();
@@ -223,7 +229,7 @@
                 $scope.GetSurveyByGroup = function () {
                     $http.post('@Url.Action("GetSurveyByGroup")', { id: $scope.data.groupId }).then(function (res) {
                         $scope.surveys = res.data;
-                        
+
                     }, httpError);
                 };
                 $scope.GetSurveyDetails = function ($event, survey) {
@@ -232,7 +238,7 @@
                     $($event.currentTarget).addClass('row-selected');
                     $http.post('@Url.Action("GetSurveyDetails")', { id: survey.Id }).then(function (res) {
                         $scope.surveyDetails = res.data;
-                    },httpError);
+                    }, httpError);
                 };
                 $scope.addSurveyDetails = function () {
 
@@ -242,12 +248,10 @@
                         DelimitedItemList: $scope.surveyDetail.Type != 0 ? $scope.surveyDetail.items.join(";;") : "",
                         Type: $scope.surveyDetail.Type
                     };
-
-                    $http.post('@Url.Action("AddSurveyDetail")', obj).then(function (res) {
-                        console.log(res);
+                    debugger;
+                    $http.post('@Url.Action("AddSurveyDetail")', { detail: obj, id: $scope.selectedSurvey.Id }).then(function (res) {
+                        $scope.surveyDetails = res.data;
                     }, httpError);
-
-                    $scope.surveyDetails.push(obj);
                 };
                 $scope.addDetailItem = function () {
                     debugger;
