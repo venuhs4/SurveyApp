@@ -10,7 +10,7 @@ using SurveyApp.Models;
 
 namespace SurveyApp.Controllers
 {
-    public class SurveyGroupsController : Controller
+    public class SurveyGroupsController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 

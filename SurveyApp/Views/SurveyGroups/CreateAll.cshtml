@@ -79,7 +79,7 @@
                     $scope.data.GroupName = "";
                     $scope.surveys = $scope.surveys.concat($scope.selectedSurveys);
                     $scope.selectedSurveys = [];
-                });
+                }, httpError);
             }
             else
             {

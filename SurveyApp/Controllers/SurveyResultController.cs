@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace SurveyApp.Controllers
 {
-    public class SurveyResultController : Controller
+    public class SurveyResultController : BaseController
     {
         // GET: SurveyResult
         public ActionResult Index()

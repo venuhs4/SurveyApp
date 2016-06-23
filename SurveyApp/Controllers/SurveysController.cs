@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace SurveyApp.Controllers
 {
-    public class SurveysController : Controller
+    public class SurveysController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
@@ -34,6 +34,7 @@ namespace SurveyApp.Controllers
 
         public JsonResult GetSurveyDetails(long id)
         {
+            Success("Got the Survey details", true);
             var list = (from d in db.TSurveyDetail
                        where d.SurveyId == id
                        select new {

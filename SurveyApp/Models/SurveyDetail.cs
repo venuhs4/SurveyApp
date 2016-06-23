@@ -7,6 +7,7 @@ namespace SurveyApp.Models
     {
         public long SurveyDetailId { get; set; }
         public long SurveyId { get; set; }
+        public int SortingIndex { get; set; }
         public SurveyType Type { get; set; }
         public bool Dependent { get; set; }
         public long DependentItemID { get; set; }

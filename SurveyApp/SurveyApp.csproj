@@ -196,6 +196,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SurveyGroupsController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Alerts.cs" />
     <Compile Include="Migrations\201606200706369_InitialCreate.cs" />
     <Compile Include="Migrations\201606200706369_InitialCreate.Designer.cs">
       <DependentUpon>201606200706369_InitialCreate.cs</DependentUpon>
@@ -232,6 +234,10 @@
     <Compile Include="Migrations\201606211101177_added survey group mapping table.cs" />
     <Compile Include="Migrations\201606211101177_added survey group mapping table.Designer.cs">
       <DependentUpon>201606211101177_added survey group mapping table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606231032424_added SortingIndex.cs" />
+    <Compile Include="Migrations\201606231032424_added SortingIndex.Designer.cs">
+      <DependentUpon>201606231032424_added SortingIndex.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1077,6 +1083,7 @@
     <Content Include="bower_components\startbootstrap-sb-admin-2\README.md" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Custom\custom-alerts.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -1142,6 +1149,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\adminUI\" />
     <Folder Include="Scripts\adminUI\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1172,6 +1180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606211101177_added survey group mapping table.resx">
       <DependentUpon>201606211101177_added survey group mapping table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606231032424_added SortingIndex.resx">
+      <DependentUpon>201606231032424_added SortingIndex.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
