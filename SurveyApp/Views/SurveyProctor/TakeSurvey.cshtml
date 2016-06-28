@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "TakeSurvey";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="takeSurvey" ng-controller="takeSurveyCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Take Survey</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="col-lg-12">
+        <div class="panel panel-default" ng-repeat="sd in serveyDetails">
+            <div class="panel-body">
+                <h3>{{$index+1}}). {{sd.Prompt}}</h3>
+                <div ng-if="sd.Type == 0">
+                    <div class="form-group">
+                        <textarea class="form-control" ng-model="sd.ans" rows="3"></textarea>
+                    </div>
+                </div>
+                <div ng-if="sd.Type == 1">
+                    <div class="radio" ng-repeat="di in sd.DelimitedItemList">
+                        <label>
+                            <input name="radio" type="radio" ng-value="$index" ng-model="sd.radio">
+                            {{di.Value}}
+                        </label>
+                    </div>
+                </div>
+                <div ng-if="sd.Type == 2">
+                    <div class="checkbox" ng-repeat="di in sd.DelimitedItemList">
+                        <label>
+                            <input type="checkbox" ng-value="$index" ng-model="di.selected">
+                            {{di.Value}}
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <button class="btn btn-success" ng-click="submitSurvey()"></button>
+    </div>
+</div>
+<script>
+    var app = angular.module('takeSurveyApp', []);
+    app.controller('takeSurveyCtrl', ['$scope', '$http', function ($scope, $http) {
+        $scope.data = {};
+        $scope.surveyId = 0;
+        $scope.serveyDetails = [];
+        $http.get('@Url.Action("GetSurveyDetails")').then(function (res) {
+            $scope.serveyDetails = res.data.surveyDetails;
+            $scope.surveyId = res.data.surveyId;
+            $scope.serveyDetails.forEach(function (e) {
+                if (e.Type != 0) {
+                    var copy = e.DelimitedItemList.split(';;');
+                    e.DelimitedItemList = [];
+                    copy.forEach(function (v) { e.DelimitedItemList.push({ Value: v, selected: false }) });
+                }
+            });
+
+            $scope.surveyId = res.data.surveyId;
+        });
+        $scope.submitSurvey = function () {
+            var resultList = [];
+            $scope.serveyDetails.forEach(function (e) {
+                switch (e.Type) {
+                    case 0: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer: e.ans });
+                        break;
+                    case 1: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer: e.radio });
+                        break;
+                    case 2:
+                        var tempSelected = [];
+                        e.DelimitedItemList.forEach(function (a, index) {
+                            a.selected && tempSelected.push(index);
+                        });
+                        resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer: tempSelected.join(";;") });
+                        break;
+                }
+            });
+            debugger;
+            $http.post('@Url.Action("SaveSurveyResult")', { list: resultList,surveyId: $scope.surveyId }).then(function (res) {
+                console.log(res.data);
+            });
+        };
+    }]);
+    angular.bootstrap($('#takeSurvey'), ['takeSurveyApp']);
+</script>

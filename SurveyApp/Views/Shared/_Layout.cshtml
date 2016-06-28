@@ -87,6 +87,9 @@
                         <a href="#"><i class="fa fa-shield"></i> Survey Master<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
+                                @Html.ActionLink("Initial Survey", "InitialSurvey", "Surveys")
+                            </li>
+                            <li>
                                 @Html.ActionLink("Create New Survey", "Create", "Surveys")
                             </li>
                             <li>
@@ -101,7 +104,7 @@
                         <a href="#"><i class="fa fa-book"></i> Survey Procton<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                <a href="flot.html">Take A Survey</a>
+                                @Html.ActionLink(" Take a survey", "TakeSurvey", "SurveyProctor")
                             </li>
                         </ul>
                     </li>

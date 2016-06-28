@@ -1,59 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Initial Survey";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div id="allDetails" ng-controller="allDetailsCtrl">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">All Surveys Details</h1>
-        </div>
-    </div>
 
-    <div class="col-lg-4">
+<div id="initialSurvey" ng-controller="initialSurveyCtrl">
+    <div class="col-lg-12">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                List of Surveys
-            </div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                <div class="form-group">
-                    <label class="control-label">Survey Group</label>
-                    <select class="form-control" ng-model="data.groupId" ng-options="g.Id as g.Name for g in groups" ng-change="GetSurveyByGroup()"></select>
-                </div>
-
-                <div>
-                    <table class="table table-hover" ng-if="surveys.length !=0">
-                        <thead>
-                            <tr style="background-color:#f5f5f5">
-                                <td>
-                                    #
-                                </td>
-                                <td>
-                                    Survey Name
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody style="cursor:pointer">
-                            <tr ng-repeat="a in surveys" ng-click="GetSurveyDetails($event,a)">
-                                <td>
-                                    {{$index + 1}}
-                                </td>
-                                <td>
-                                    {{a.Name}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-            <!-- /.panel-body -->
-        </div>
-        <!-- /.panel -->
-    </div>
-
-    <div class="col-lg-8">
-        <div class="panel panel-default" ng-show="selectedSurvey != 'none'">
             <div class="panel-heading">
                 Survey Details
                 <div class="pull-right">
@@ -171,12 +123,17 @@
                 <div id="sortable">
                     <div class="panel panel-default" ng-repeat="d in surveyDetails" id="{{$index}}">
                         <div class="panel-body">
-                            <div class="col-md-3"><b>Prompt({{d.SortingIndex}})</b></div>
+
+                            <div class="col-md-2"><b>Prompt({{d.SortingIndex}})</b></div>
                             <div class="col-md-9">{{d.Prompt}}</div>
+                            <div class="col-md-1">
+                                <button class="btn btn-danger" ng-hide="d.delete == 'SURE'" ng-click="d.delete = 'SURE'"><span class="glyphicon glyphicon-remove"></span></button>
+                                <button class="btn btn-danger" ng-show="d.delete == 'SURE'" ng-click="removeSurveyDetail($index)">Sure</button>
+                            </div>
                             <hr />
                             <div ng-if="d.Type == 1 || d.Type ==2">
-                                <div class="col-md-3"><b>Answers</b></div>
-                                <div class="col-md-9">
+                                <div class="col-md-2"><b>Answers</b></div>
+                                <div class="col-md-10">
                                     <div class="{{d.Type == 1? 'radio':'checkbox'}}" ng-repeat="di in d.DelimitedItemList.split(';;')">
                                         <label>
                                             <input name="radio" type="{{d.Type == 1? 'radio':'checkbox'}}">
@@ -191,83 +148,74 @@
             </div>
         </div>
     </div>
-    <script>
-        var app = angular.module('allDetailApp', []);
-        app.controller('allDetailsCtrl', ['$http', '$scope', function ($http, $scope) {
-            $scope.groups = [];
-            $scope.surveys = [];
-            $scope.surveyDetail = { items: [] };
-            $scope.detailItem = "";
-            $scope.surveyDetails = [];
-            $scope.data = {};
-            $scope.selectedSurvey = "none";
-            $scope.serveyTypes = [];
+</div>
+<script>
+    var app = angular.module('initialSurveyApp', []);
+    app.controller('initialSurveyCtrl', ['$scope', '$http', function ($scope, $http) {
 
-            $("#sortable").sortable({
-                axis: "y",
-                opacity: 0.7,
-                update: function (event, ui) {
-                    debugger;
-                    var sortOrder = $("#sortable").sortable("toArray");
-                    sortOrder.forEach(function (ele, index) {
-                        $scope.surveyDetails[parseInt(ele)].SortingIndex = index;
-                    });
-                    $http.post('@Url.Action("OrderIndexUpdate")', { surveys: $scope.surveyDetails }).then(function (res) {
-                        successAlert("Ordered Items...");
-                    }, httpError);
-                }
-            });
-            $("#sortable").disableSelection();
+        $scope.groups = [];
+        $scope.surveys = [];
+        $scope.surveyDetail = { items: [] };
+        $scope.detailItem = "";
+        $scope.surveyDetails = [];
+        $scope.data = {};
+        $scope.selectedSurvey = "none";
+        $scope.serveyTypes = [];
 
-            $http.get('@Url.Action("GetAllSurveyGroups")').then(function (res) {
-                $scope.groups = [{ Name: 'All Surveys', Id: 0 }];
-                $scope.groups = $scope.groups.concat(res.data);
-            });
-            $http.get('@Url.Action("GetServeyTypes")').then(function (res) {
+        $("#sortable").sortable({
+            axis: "y",
+            opacity: 0.7,
+            update: function (event, ui) {
                 debugger;
-                $scope.serveyTypes = res.data;
-            }, httpError);
-            $scope.GetSurveyByGroup = function () {
-                $http.post('@Url.Action("GetSurveyByGroup")', { id: $scope.data.groupId }).then(function (res) {
-                    $scope.surveys = res.data;
-
+                var sortOrder = $("#sortable").sortable("toArray");
+                sortOrder.forEach(function (ele, index) {
+                    $scope.surveyDetails[parseInt(ele)].SortingIndex = index;
+                });
+                $http.post('@Url.Action("OrderIndexUpdate")', { surveys: $scope.surveyDetails }).then(function (res) {
+                    successAlert("Ordered Items...");
                 }, httpError);
-            };
-            $scope.GetSurveyDetails = function ($event, survey) {
-                $scope.selectedSurvey = survey;
-                $($event.currentTarget).siblings().removeClass('row-selected');
-                $($event.currentTarget).addClass('row-selected');
-                $http.post('@Url.Action("GetSurveyDetails")', { id: survey.Id }).then(function (res) {
-                    $scope.surveyDetails = res.data;
-                }, httpError);
-            };
-            $scope.addSurveyDetails = function () {
-
-                var obj = {
-                    SurveyId: $scope.selectedSurvey.Id,
-                    Prompt: $scope.surveyDetail.Prompt,
-                    DelimitedItemList: $scope.surveyDetail.Type != 0 ? $scope.surveyDetail.items.join(";;") : "",
-                    Type: $scope.surveyDetail.Type
-                };
-                debugger;
-                $http.post('@Url.Action("AddSurveyDetail")', { detail: obj, id: $scope.selectedSurvey.Id }).then(function (res) {
-                    $scope.surveyDetails = res.data;
-                }, httpError);
-            };
-            $scope.addDetailItem = function () {
-                debugger;
-                if (!!$scope.detailItem && $scope.surveyDetail.items.filter(function (e) { return e == $scope.detailItem; }).length == 0) {
-                    $scope.surveyDetail.items.push($scope.detailItem);
-                }
-            };
-            $scope.removeDetailItem = function (index, item) {
-                $scope.surveyDetail.items.splice(index, 1);
             }
-        }]);
-        angular.bootstrap($('#allDetails'), ['allDetailApp']);
-    </script>
-    <style>
-        .row-selected {
-            background-color: #56acdb !important;
-        }
-    </style>
+        });
+        $("#sortable").disableSelection();
+
+        $http.get('@Url.Action("GetServeyTypes")').then(function (res) {
+            debugger;
+            $scope.serveyTypes = res.data;
+        }, httpError);
+
+        $http.post('@Url.Action("GetSurveyDetails")').then(function (res) {
+            $scope.surveyDetails = res.data;
+        }, httpError);
+        $scope.addSurveyDetails = function () {
+
+            var obj = {
+                SurveyId: 1,
+                Prompt: $scope.surveyDetail.Prompt,
+                DelimitedItemList: $scope.surveyDetail.Type != 0 ? $scope.surveyDetail.items.join(";;") : "",
+                Type: $scope.surveyDetail.Type
+            };
+            debugger;
+            $http.post('@Url.Action("AddSurveyDetail")', { detail: obj, id:1 }).then(function (res) {
+                $scope.surveyDetails = res.data;
+            }, httpError);
+        };
+        $scope.addDetailItem = function () {
+            debugger;
+            if (!!$scope.detailItem && $scope.surveyDetail.items.filter(function (e) { return e == $scope.detailItem; }).length == 0) {
+                $scope.surveyDetail.items.push($scope.detailItem);
+            }
+        };
+        $scope.removeDetailItem = function (index, item) {
+            $scope.surveyDetail.items.splice(index, 1);
+        };
+        $scope.removeSurveyDetail = function (index) {
+            $http.post('@Url.Action("RemoveSurveyDetail")', { detail: $scope.surveyDetails[index] }).then(function (res) {
+                console.log(res.data);
+                $scope.surveyDetails.splice(index, 1);
+                successAlert("Survey Detail removed");
+            }, httpError);
+        };
+
+    }]);
+    angular.bootstrap($('#initialSurvey'), ['initialSurveyApp']);
+</script>

@@ -46,5 +46,5 @@ function addAlert(alert, id, duration)
 };
 
 httpError = function (res) {
-    warningAlert("Error Getting data. " + JSON.stringify(error));
+    warningAlert("Error Getting data. " + JSON.stringify(res));
 };

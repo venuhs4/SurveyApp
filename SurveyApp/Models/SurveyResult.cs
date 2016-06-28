@@ -8,7 +8,9 @@ namespace SurveyApp.Models
         public long SurveyId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public DateTime DateCreated { get; set; }
-        public long UserId { get; set; }
+        public string UserId { get; set; }
     }
 }

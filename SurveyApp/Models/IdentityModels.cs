@@ -30,6 +30,7 @@ namespace SurveyApp.Models
         public DbSet<SurveyDetail> TSurveyDetail { get; set; }
         public DbSet<SurveyGroup> TSurveyGroup { get; set; }
         public DbSet<SurveyGroupMap> TSurveyGroupMap { get; set; }
+        public DbSet<SurveyAnswer> TSurveyAnswer { get; set; }
 
         public static ApplicationDbContext Create()
         {

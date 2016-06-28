@@ -22,6 +22,13 @@ namespace SurveyApp.Controllers
         {
         }
 
+        public static async Task<ApplicationUser> GetUserDetailsDetails()
+        {
+            //var username = User.Identity.Name;
+            //var user = await _userManager.FindByNameAsync(username);
+            return null;
+        }
+
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
             UserManager = userManager;

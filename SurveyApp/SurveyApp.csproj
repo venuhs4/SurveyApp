@@ -239,11 +239,28 @@
     <Compile Include="Migrations\201606231032424_added SortingIndex.Designer.cs">
       <DependentUpon>201606231032424_added SortingIndex.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606270624376_added survey answers table.cs" />
+    <Compile Include="Migrations\201606270624376_added survey answers table.Designer.cs">
+      <DependentUpon>201606270624376_added survey answers table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606270811119_added start time and end time for survey result.cs" />
+    <Compile Include="Migrations\201606270811119_added start time and end time for survey result.Designer.cs">
+      <DependentUpon>201606270811119_added start time and end time for survey result.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606280934223_added  RegisteredUser.cs" />
+    <Compile Include="Migrations\201606280934223_added  RegisteredUser.Designer.cs">
+      <DependentUpon>201606280934223_added  RegisteredUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606280948337_added  RegisteredUser 2.cs" />
+    <Compile Include="Migrations\201606280948337_added  RegisteredUser 2.Designer.cs">
+      <DependentUpon>201606280948337_added  RegisteredUser 2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Survey.cs" />
+    <Compile Include="Models\SurveyAnswer.cs" />
     <Compile Include="Models\SurveyDetail.cs" />
     <Compile Include="Models\SurveyGroup.cs" />
     <Compile Include="Models\SurveyGroupMap.cs" />
@@ -1144,6 +1161,10 @@
     <Content Include="Views\SurveyGroups\Edit.cshtml" />
     <Content Include="Views\SurveyGroups\Index.cshtml" />
     <Content Include="Views\SurveyGroups\CreateAll.cshtml" />
+    <Content Include="Views\SurveyProctor\TakeSurvey.cshtml" />
+    <Content Include="Views\Surveys\InitialSurvey.cshtml" />
+    <Content Include="Views\Shared\_TempLayout.cshtml" />
+    <Content Include="Views\Surveys\TakeInitialSurvey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1183,6 +1204,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606231032424_added SortingIndex.resx">
       <DependentUpon>201606231032424_added SortingIndex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606270624376_added survey answers table.resx">
+      <DependentUpon>201606270624376_added survey answers table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606270811119_added start time and end time for survey result.resx">
+      <DependentUpon>201606270811119_added start time and end time for survey result.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606280934223_added  RegisteredUser.resx">
+      <DependentUpon>201606280934223_added  RegisteredUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606280948337_added  RegisteredUser 2.resx">
+      <DependentUpon>201606280948337_added  RegisteredUser 2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
