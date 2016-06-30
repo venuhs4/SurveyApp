@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -79,17 +82,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -130,6 +131,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -196,6 +198,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnalystController.cs" />
+    <Compile Include="Controllers\AnalystSurveyTypesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -255,12 +259,23 @@
     <Compile Include="Migrations\201606280948337_added  RegisteredUser 2.Designer.cs">
       <DependentUpon>201606280948337_added  RegisteredUser 2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606300826226_SurveyClient table added.cs" />
+    <Compile Include="Migrations\201606300826226_SurveyClient table added.Designer.cs">
+      <DependentUpon>201606300826226_SurveyClient table added.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606300950178_added AnalystSurveyType.cs" />
+    <Compile Include="Migrations\201606300950178_added AnalystSurveyType.Designer.cs">
+      <DependentUpon>201606300950178_added AnalystSurveyType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AnalystSurvey.cs" />
+    <Compile Include="Models\AnalystSurveyType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Survey.cs" />
     <Compile Include="Models\SurveyAnswer.cs" />
+    <Compile Include="Models\SurveyClient.cs" />
     <Compile Include="Models\SurveyDetail.cs" />
     <Compile Include="Models\SurveyGroup.cs" />
     <Compile Include="Models\SurveyGroupMap.cs" />
@@ -1098,6 +1113,7 @@
     <Content Include="bower_components\startbootstrap-sb-admin-2\less\variables.less" />
     <Content Include="bower_components\startbootstrap-sb-admin-2\LICENSE" />
     <Content Include="bower_components\startbootstrap-sb-admin-2\README.md" />
+    <None Include="Properties\PublishProfiles\surveyapp.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Custom\custom-alerts.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
@@ -1165,6 +1181,12 @@
     <Content Include="Views\Surveys\InitialSurvey.cshtml" />
     <Content Include="Views\Shared\_TempLayout.cshtml" />
     <Content Include="Views\Surveys\TakeInitialSurvey.cshtml" />
+    <Content Include="Views\AnalystSurveyTypes\Create.cshtml" />
+    <Content Include="Views\AnalystSurveyTypes\Delete.cshtml" />
+    <Content Include="Views\AnalystSurveyTypes\Details.cshtml" />
+    <Content Include="Views\AnalystSurveyTypes\Edit.cshtml" />
+    <Content Include="Views\AnalystSurveyTypes\Index.cshtml" />
+    <Content Include="Views\Analyst\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1216,6 +1238,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606280948337_added  RegisteredUser 2.resx">
       <DependentUpon>201606280948337_added  RegisteredUser 2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606300826226_SurveyClient table added.resx">
+      <DependentUpon>201606300826226_SurveyClient table added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606300950178_added AnalystSurveyType.resx">
+      <DependentUpon>201606300950178_added AnalystSurveyType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="analyst" ng-controller="analystCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">Analyst</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Survey Types
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li ng-repeat="st in surveyTypes" ng-click="selected.surveyType = st" ng-class="{'active':st.AnalystSurveyTypeId == selected.surveyType.AnalystSurveyTypeId }"><a data-toggle="tab" href="#home">{{st.AnalystTypeName}}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="home" class="tab-pane fade in active">
+                        <div ng-repeat="st in surveyTypes" ng-show="st.AnalystSurveyTypeId == selected.surveyType.AnalystSurveyTypeId">
+                            <h3>{{st.AnalystTypeName}}</h3>
+                            <br/>
+                            <div class="form-group">
+                                <label for="comment">Description:</label>
+                                <textarea class="form-control" ng-model="analystSurveys[$index].Description" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Response:</label>
+                                <textarea class="form-control" ng-model="analystSurveys[$index].Response" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Internal Notes:</label>
+                                <textarea class="form-control" ng-model="analystSurveys[$index].InternalNotes" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="form-control" ng-click="saveAll()">Save All</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var app = angular.module('analystApp', []);
+    app.controller('analystCtrl', ['$scope', '$http', function ($scope, $http) {
+        $scope.selected = {};
+        $scope.analystSurveys = [];
+        $scope.surveyTypes = [];
+        $http.post('@Url.Action("GetAllAnalystSurveyTypes")', { id: 1 }).then(function (res) {
+            $scope.surveyTypes = res.data.surveyTypes;
+            $scope.selected.surveyType = $scope.surveyTypes[0];
+
+            $scope.surveyTypes.forEach(function(e){
+                var item = res.data.analystSurveys.filter(function (e) { return e.AnalystSurveyTypeId == st.AnalystSurveyTypeId; });
+                if(item.length > 0){
+                    $scope.analystSurveys.push(item);
+                }
+                else{
+                    $scope.analystSurveys.push({
+                        AnalystSurveyTypeId:99,
+                        AnalystSurveyId:999,
+                        ClientId:43,
+                        Created: new Date(),
+                        Description: "default Description",
+                        InternalNotes:"default InternalNotes",
+                        Response:"default Response"
+                    });
+                }
+            });
+
+        });
+        $scope.saveAll = function () {
+            $http.post('@Url.Action("SaveAnalystSurvey")', {}).then(function (res) {
+
+            });
+        };
+    }]);
+    angular.bootstrap($('#analyst'), ['analystApp']);
+</script>

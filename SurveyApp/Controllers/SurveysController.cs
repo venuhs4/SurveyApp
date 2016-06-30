@@ -65,6 +65,24 @@ namespace SurveyApp.Controllers
             return Json(new { surveyId = 1, surveyDetails }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SaveInitialSurvey(List<SurveyAnswer> list)
+        {
+            var sr = new SurveyResult()
+            {
+                DateCreated = DateTime.Now,
+                EndTime = DateTime.Now,
+                StartTime = DateTime.Now,
+                SurveyId = 1
+            };
+
+            db.TSurveyResult.Add(sr);
+            db.SaveChanges();
+            list.ForEach((e) => { e.SurveyResultId = sr.SurveyResultId; });
+            db.TSurveyAnswer.AddRange(list);
+            db.SaveChanges();
+            return Json("Survey Answers saved", JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetServeyTypes()
         {
             return Json(SurveyDetail.GetServeyTypes().Select(s => new { Id = s.Key, Name = s.Value }).ToList(), JsonRequestBehavior.AllowGet);
@@ -165,23 +183,7 @@ namespace SurveyApp.Controllers
             }
         }
 
-        public JsonResult SaveInitialSurvey(List<SurveyAnswer> list)
-        {
-            var sr = new SurveyResult()
-            {
-                DateCreated = DateTime.Now,
-                EndTime = DateTime.Now,
-                StartTime = DateTime.Now,
-                SurveyId = 1
-            };
-
-            db.TSurveyResult.Add(sr);
-            db.SaveChanges();
-            list.ForEach((e) => { e.SurveyResultId = sr.SurveyResultId; });
-            db.TSurveyAnswer.AddRange(list);
-            db.SaveChanges();
-            return Json("Survey Answers saved", JsonRequestBehavior.AllowGet);
-        }
+        
 
         // GET: Surveys/Details/5
         public ActionResult Details(long? id)

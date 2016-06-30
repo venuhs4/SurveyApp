@@ -6,6 +6,5 @@
         public long SurveyDetailId { get; set; }
         public long SurveyResultId { get; set; }
         public string SurveyDetailAnswer { get; set; }
-        public bool RegisteredUser { get; set; }
     }
 }
