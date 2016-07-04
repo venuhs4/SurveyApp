@@ -1,44 +1,15 @@
 ﻿@{
-    ViewBag.Title = "Initial Survey";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Secandary Survey";
+    Layout = "~/Views/Shared/_TempLayout.cshtml";
 }
 
-<div id="takeInitialSurvey" ng-controller="takeInitialSurveyCtrl">
+<div id="takeSecondarySurvey" ng-controller="takeSecondarySurveyCtrl">
     <div class="row">
         <div class="col-lg-offset-2 col-lg-8">
-            <h1 class="page-header">Initial Survey</h1>
+            <h1 class="page-header">Secondary Survey</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-2"><b>Prompt</b></div>
-            <div class="col-md-9">What is you full name?/ What is your organisation name?</div>
-            <div class="form-group">
-                <textarea class="form-control" ng-model="mandatoryData.name" rows="3"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-2"><b>Prompt</b></div>
-            <div class="col-md-9">What is your E-mail address?</div>
-            <div class="form-group">
-                <textarea class="form-control" ng-model="mandatoryData.email" rows="3"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-2"><b>Prompt</b></div>
-            <div class="col-md-9">What is your phone number?</div>
-            <div class="form-group">
-                <textarea class="form-control" ng-model="mandatoryData.phone" rows="3"></textarea>
-            </div>
-        </div>
-    </div>
-
     <div class="col-lg-offset-2 col-lg-8">
         <div class="panel panel-default" ng-repeat="sd in serveyDetails">
             <div class="panel-body">
@@ -71,12 +42,11 @@
     </div>
 </div>
 <script>
-    var app = angular.module('takeInitialSurveyApp', []);
-    app.controller('takeInitialSurveyCtrl', ['$scope', '$http', function ($scope, $http) {
-        $scope.mandatoryData = {};
+    var app = angular.module('takeSecondarySurveyApp', []);
+    app.controller('takeSecondarySurveyCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.data = {};
         $scope.serveyDetails = [];
-        $http.get('@Url.Action("GetInitialSurveyDetails")').then(function (res) {
+        $http.get('@Url.Action("GetSecondarySurveyDetails")').then(function (res) {
             $scope.serveyDetails = res.data.surveyDetails;
             $scope.serveyDetails.forEach(function (e) {
                 if (e.Type != 0) {
@@ -106,10 +76,10 @@
                 }
             });
             debugger;
-            $http.post('@Url.Action("SaveInitialSurvey")', { list: resultList, $scope.mandatoryData.name,$scope.mandatoryData.email, $scope.mandatoryData.phone }).then(function (res) {
+            $http.post('@Url.Action("SaveSecondarySurvey")', { list: resultList }).then(function (res) {
                 console.log(res.data);
             });
         };
     }]);
-    angular.bootstrap($('#takeInitialSurvey'), ['takeInitialSurveyApp']);
+    angular.bootstrap($('#takeSecondarySurvey'), ['takeSecondarySurveyApp']);
 </script>

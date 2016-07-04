@@ -1,23 +1,20 @@
-﻿@{
-    ViewBag.Title = "Initial Survey";
+﻿
+@{
+    ViewBag.Title = "SecandarySurvey";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
-<div id="initialSurvey" ng-controller="initialSurveyCtrl">
+<div id="secondarySurvey" ng-controller="secondarySurveyCtrl">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Survey Details
+                Secondary Details
                 <div class="pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#detailModal">New Survey Detail</button>
                     </div>
                 </div>
             </div>
-           
-            <div id="summernote2">Hello Summernote</div>
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <!-- Modal -->
@@ -40,7 +37,6 @@
                                             <label>Prompt</label>
                                             <textarea class="form-control" ng-model="surveyDetail.Prompt" rows="3"></textarea>
                                         </div>
-                                        <div id="summernote1">Hello Summernote</div>
                                         <div ng-show="surveyDetail.Type == 2">
                                             <div class="form-group">
                                                 <form class="form-inline">
@@ -125,24 +121,6 @@
                     </div>
                 </div>
                 <!-- /.panel -->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="col-md-2"><b>Prompt</b></div>
-                        <div class="col-md-9">What is you full name?/ What is your organisation name?</div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="col-md-2"><b>Prompt</b></div>
-                        <div class="col-md-9">What is your E-mail address?</div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="col-md-2"><b>Prompt</b></div>
-                        <div class="col-md-9">What is your phone number?</div>
-                    </div>
-                </div>
                 <div id="sortable">
                     <div class="panel panel-default" ng-repeat="d in surveyDetails" id="{{$index}}">
                         <div class="panel-body">
@@ -173,8 +151,9 @@
     </div>
 </div>
 <script>
-    var app = angular.module('initialSurveyApp', []);
-    app.controller('initialSurveyCtrl', ['$scope', '$http', function ($scope, $http) {
+    var app = angular.module('secondarySurveyApp', []);
+    app.controller('secondarySurveyCtrl', ['$scope', '$http', function ($scope, $http) {
+
         $scope.groups = [];
         $scope.surveys = [];
         $scope.surveyDetail = { items: [] };
@@ -205,19 +184,19 @@
             $scope.serveyTypes = res.data;
         }, httpError);
 
-        $http.post('@Url.Action("GetSurveyDetails")', { id: 1 }).then(function (res) {
+        $http.post('@Url.Action("GetSurveyDetails")',{id:2}).then(function (res) {
             $scope.surveyDetails = res.data;
         }, httpError);
         $scope.addSurveyDetails = function () {
-            debugger;
+
             var obj = {
                 SurveyId: 1,
                 Prompt: $scope.surveyDetail.Prompt,
                 DelimitedItemList: $scope.surveyDetail.Type != 0 ? $scope.surveyDetail.items.join(";;") : "",
                 Type: $scope.surveyDetail.Type
             };
-            
-            $http.post('@Url.Action("AddSurveyDetail")', { detail: obj, id: 1 }).then(function (res) {
+            debugger;
+            $http.post('@Url.Action("AddSurveyDetail")', { detail: obj, id:2 }).then(function (res) {
                 $scope.surveyDetails = res.data;
             }, httpError);
         };
@@ -239,12 +218,6 @@
         };
 
     }]);
-    angular.bootstrap($('#initialSurvey'), ['initialSurveyApp']);
+    angular.bootstrap($('#secondarySurvey'), ['secondarySurveyApp']);
 </script>
 
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
-<script src="~/Scripts/summernote.min.js"></script>
-<script>
-    $('#summernote1').summernote();
-    $('#summernote2').summernote();
-</script>

@@ -1,13 +1,15 @@
 ﻿
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "ConnectToAnalyst";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="~/Scripts/angular-websocket.min.js"></script>
 <script src="~/Scripts/Custom/web-sockets.js"></script>
-<div id="analyst" ng-controller="analystCtrl">
+<div id="connectToAnalyst" ng-controller="connectToAnalystCtrl">
     <div class="row">
         <div class="col-lg-12">
-            <h2 class="page-header">Analyst</h2>
+            <h2 class="page-header">connectToAnalyst</h2>
         </div>
     </div>
     <div class="row">
@@ -15,7 +17,6 @@
             <div class="panel-heading">
                 Survey Types
             </div>
-
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-3">
@@ -49,24 +50,26 @@
                     </div>
                 </div>
                 <button class="form-control" ng-click="saveAll()">Save All</button>
-
-                <ul ng-repeat="data in data.collection track by $index">
-                    <li> {{ data }} </li>
-                </ul>
+                <span> {{ data.test }} </span>
             </div>
         </div>
     </div>
 </div>
 <script>
-    var app = angular.module('analystApp', []);
-    app.controller('analystCtrl', ['$scope', '$http', function ($scope, $http) {
+    var app = angular.module('connectToAnalystApp', []);
+    app.controller('connectToAnalystCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.selected = {};
         $scope.analystSurveys = [];
         $scope.surveyTypes = [];
         $scope.usernames = [];
+        $scope.ws = {};
         $scope.data = {
             selectedUser: 'All'
-        }
+        };
+        $scope.change = function () {
+            var str = JSON.stringify($scope.analystSurveys);
+            $scope.ws.send(str);
+        };
 
         $http.get('@Url.Action("GetAllUsers")').then(function (res) {
             console.log(res);
@@ -74,17 +77,12 @@
         });
 
         $scope.connect = function () {
-            $scope.ws = wsConnect('analyst', 'client', function () {
+            $scope.ws = wsConnect('client', 'analyst', function () {
                 debugger;
                 $scope.ws.onmessage = $scope.onmessage;
                 $scope.ws.onclose = $scope.onclose;
             });
         };
-        $scope.change = function () {
-            var str = JSON.stringify($scope.analystSurveys);
-            $scope.ws.send(str);
-        };
-
         $scope.onmessage = function (evt) {
             debugger;
             $scope.analystSurveys = JSON.parse(evt.data);
@@ -93,6 +91,7 @@
         $scope.onclose = function () {
             console.log("connection closed");
         }
+
 
         $http.post('@Url.Action("GetAllAnalystSurveyTypes")', { id: 1 }).then(function (res) {
             $scope.surveyTypes = res.data.surveyTypes;
@@ -115,14 +114,17 @@
                     });
                 }
             });
+
             oldString = JSON.stringify($scope.surveyTypes);
+
         });
         $scope.saveAll = function () {
             $http.post('@Url.Action("SaveAnalystSurvey")', {}).then(function (res) {
 
             });
         };
-
     }]);
-    angular.bootstrap($('#analyst'), ['analystApp']);
+    angular.bootstrap($('#connectToAnalyst'), ['connectToAnalystApp']);
 </script>
+
+

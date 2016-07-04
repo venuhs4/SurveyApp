@@ -16,15 +16,33 @@ namespace SurveyApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult ConnectToAnalyst()
+        {
+            return View();
+        }
+
         public JsonResult GetAllAnalystSurveyTypes(long id)
         {
             var surveyTypes = db.TAnalystSurveyType.Select(s => new { s.AnalystSurveyTypeId, s.AnalystTypeName, s.Description }).ToList();
             var analystSurveys = (from ast in db.TAnalystSurveyType
-                                join ss in db.TAnalystSurvey on ast.AnalystSurveyTypeId equals ss.AnalystSurveyTypeId
-                                select new { ast.AnalystSurveyTypeId,
-                                    ss.AnalystSurveyId, ss.ClientId, ss.Created, ss.Description, ss.InternalNotes, ss.Response
-                                    }).ToList();
+                                  join ss in db.TAnalystSurvey on ast.AnalystSurveyTypeId equals ss.AnalystSurveyTypeId
+                                  select new
+                                  {
+                                      ast.AnalystSurveyTypeId,
+                                      ss.AnalystSurveyId,
+                                      ss.ClientId,
+                                      ss.Created,
+                                      ss.Description,
+                                      ss.InternalNotes,
+                                      ss.Response
+                                  }).ToList();
             return Json(new { surveyTypes, analystSurveys }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllUsers()
+        {
+            return Json(db.Users.Select(s => s.UserName).ToList(), JsonRequestBehavior.AllowGet);
         }
     }
 }

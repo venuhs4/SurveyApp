@@ -203,6 +203,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SurveyGroupsController.cs" />
     <Compile Include="Controllers\SurveyProctorController.cs" />
     <Compile Include="Controllers\SurveyResultController.cs" />
@@ -776,12 +777,16 @@
     <Content Include="Content\bootstrap.def.css" />
     <Content Include="Content\bootstrap.def.min.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\content.min.css" />
+    <Content Include="Content\skin.min.css" />
+    <Content Include="Content\summernote.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="Scripts\angular-websocket.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1116,6 +1121,7 @@
     <None Include="Properties\PublishProfiles\surveyapp.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Custom\custom-alerts.js" />
+    <Content Include="Scripts\Custom\web-sockets.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1127,6 +1133,10 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\summernote.js" />
+    <Content Include="Scripts\summernote.min.js" />
+    <Content Include="Scripts\theme.min.js" />
+    <Content Include="Scripts\tinymce.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1187,6 +1197,11 @@
     <Content Include="Views\AnalystSurveyTypes\Edit.cshtml" />
     <Content Include="Views\AnalystSurveyTypes\Index.cshtml" />
     <Content Include="Views\Analyst\Index.cshtml" />
+    <Content Include="Views\Surveys\SecandarySurvey.cshtml" />
+    <Content Include="Views\Surveys\TakeSecandarySurvey.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Role\Create.cshtml" />
+    <Content Include="Views\Analyst\ConnectToAnalyst.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -38,6 +38,16 @@ namespace SurveyApp.Controllers
             return View("TakeInitialSurvey", "_TempLayout");
         }
 
+        public ActionResult SecondarySurvey()
+        {
+            return View();
+        }
+
+        public ActionResult TakeSecondarySurvey()
+        {
+            return View();
+        }
+
         public JsonResult GetInitialSurveyDetails()
         {
             var surveyDetails = (from sd in db.TSurveyDetail
@@ -65,7 +75,7 @@ namespace SurveyApp.Controllers
             return Json(new { surveyId = 1, surveyDetails }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SaveInitialSurvey(List<SurveyAnswer> list)
+        public JsonResult SaveInitialSurvey(List<SurveyAnswer> list, string name, string email, string phone)
         {
             var sr = new SurveyResult()
             {
@@ -83,15 +93,50 @@ namespace SurveyApp.Controllers
             return Json("Survey Answers saved", JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetSecondarySurveyDetails()
+        {
+            var surveyDetails = (from sd in db.TSurveyDetail
+                                 join s in db.TSurvey on sd.SurveyId equals s.SurveyId
+                                 where s.SurveyId == 2
+                                 orderby sd.SortingIndex
+                                 select new { sd.SurveyDetailId, sd.Type, sd.Prompt, sd.DelimitedItemList }).ToList();
+
+            db.TSurveyResult.Add(new SurveyResult()
+            {
+                DateCreated = DateTime.Now,
+
+            });
+
+            return Json(new { surveyAnswerId = 0, surveyId = 2, surveyDetails }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SaveSecondarySurvey(List<SurveyAnswer> list)
+        {
+            var sr = new SurveyResult()
+            {
+                DateCreated = DateTime.Now,
+                EndTime = DateTime.Now,
+                StartTime = DateTime.Now,
+                SurveyId = 2
+            };
+
+            db.TSurveyResult.Add(sr);
+            db.SaveChanges();
+            list.ForEach((e) => { e.SurveyResultId = sr.SurveyResultId; });
+            db.TSurveyAnswer.AddRange(list);
+            db.SaveChanges();
+            return Json("Survey Answers saved", JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetServeyTypes()
         {
             return Json(SurveyDetail.GetServeyTypes().Select(s => new { Id = s.Key, Name = s.Value }).ToList(), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetSurveyDetails()
+        public JsonResult GetSurveyDetails(long id)
         {
             var list = (from d in db.TSurveyDetail
-                        where d.SurveyId == 1
+                        where d.SurveyId == id
                         orderby d.SortingIndex ascending
                         select new
                         {
@@ -107,6 +152,7 @@ namespace SurveyApp.Controllers
                         }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult RemoveSurveyDetail(SurveyDetail detail)
         {
             var d = db.TSurveyDetail.Where(f => f.SurveyDetailId == detail.SurveyDetailId).FirstOrDefault();
