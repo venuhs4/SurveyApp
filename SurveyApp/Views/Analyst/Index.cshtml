@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="~/Scripts/Custom/web-sockets.js"></script>
+<link href="~/Content/bootstarp-left-nav-tabs.css" rel="stylesheet" />
 <div id="analyst" ng-controller="analystCtrl">
     <div class="row">
         <div class="col-lg-12">
@@ -17,42 +18,45 @@
             </div>
 
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-3">
-                        <select class="form-control" ng-options="u as u for u in usernames" ng-model="data.selectedUser"></select>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label class="sr-only">Email</label>
+                        <p class="form-control-static">Select the analyst : </p>
                     </div>
-                    <div class="col-lg-3">
-                        <button class="btn btn-success" ng-click="connect()">Connect</button>
+                    <div class="form-group">
+                        <select class="form-control" ng-options="u as u for u in usernames" ng-model="data.to"></select>
                     </div>
+                    <button class="btn btn-success" ng-hide="connected || !data.to" ng-click="connect();connected = true;">Connect</button>
+                    <button class="btn btn-danger" ng-show="connected" ng-click="disconnect();connected = false;">Disconnect</button>
                 </div>
-                <ul class="nav nav-tabs">
-                    <li ng-repeat="st in surveyTypes" ng-click="selected.surveyType = st" ng-class="{'active':st.AnalystSurveyTypeId == selected.surveyType.AnalystSurveyTypeId }"><a data-toggle="tab" href="#home">{{st.AnalystTypeName}}</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div id="home" class="tab-pane fade in active">
-                        <div ng-repeat="st in surveyTypes" ng-show="st.AnalystSurveyTypeId == selected.surveyType.AnalystSurveyTypeId">
-                            <h3>{{st.AnalystTypeName}}</h3>
-                            <br />
-                            <div class="form-group">
-                                <label for="comment">Description:</label>
-                                <textarea class="form-control" ng-model="analystSurveys[$index].Description" ng-change="change()" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="comment">Response:</label>
-                                <textarea class="form-control" ng-model="analystSurveys[$index].Response" ng-change="change()" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="comment">Internal Notes:</label>
-                                <textarea class="form-control" ng-model="analystSurveys[$index].InternalNotes" ng-change="change()" rows="3"></textarea>
+                <hr />
+
+                <div class="tabs-left">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="st in surveyTypes" ng-click="selected.surveyType = st" ng-class="{'active':st.AnalystSurveyTypeId == selected.surveyType.AnalystSurveyTypeId }"><a data-toggle="tab" href="#home">{{st.AnalystTypeName}}</a></li>
+                    </ul>
+                    <div class="tab-content col-xs-7 col-sm-7 col-md-9 col-lg-9">
+                        <div id="home" class="tab-pane fade in active">
+                            <div ng-repeat="st in surveyTypes" ng-show="st.AnalystSurveyTypeId == selected.surveyType.AnalystSurveyTypeId">
+                                <h3>{{st.AnalystTypeName}}</h3>
+                                <br />
+                                <div class="form-group">
+                                    <label for="comment">Description:</label>
+                                    <textarea class="form-control" ng-model="analystSurveys[$index].Description" ng-change="change()" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment">Response:</label>
+                                    <textarea class="form-control" ng-model="analystSurveys[$index].Response" ng-change="change()" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment">Internal Notes:</label>
+                                    <textarea class="form-control" ng-model="analystSurveys[$index].InternalNotes" ng-change="change()" rows="3"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <button class="form-control" ng-click="saveAll()">Save All</button>
-
-                <ul ng-repeat="data in data.collection track by $index">
-                    <li> {{ data }} </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -65,8 +69,11 @@
         $scope.surveyTypes = [];
         $scope.usernames = [];
         $scope.data = {
-            selectedUser: 'All'
-        }
+            selectedUser: 'All',
+            from: '@User.Identity.Name',
+            to:''
+        };
+        var oldData = "";
 
         $http.get('@Url.Action("GetAllUsers")').then(function (res) {
             console.log(res);
@@ -74,21 +81,30 @@
         });
 
         $scope.connect = function () {
-            $scope.ws = wsConnect('analyst', 'client', function () {
+
+            $scope.ws = wsConnect($scope.data.from, $scope.data.to, function () {
                 debugger;
                 $scope.ws.onmessage = $scope.onmessage;
                 $scope.ws.onclose = $scope.onclose;
             });
         };
+        $scope.disconnect = function () {
+            $scope.ws.close();
+        }
+
         $scope.change = function () {
             var str = JSON.stringify($scope.analystSurveys);
-            $scope.ws.send(str);
+            var changes = getChanges(oldData, str);
+            $scope.ws.send(JSON.stringify(changes));
+            oldData = str;
         };
 
         $scope.onmessage = function (evt) {
             debugger;
-            $scope.analystSurveys = JSON.parse(evt.data);
+            var str = getOriginal(oldData, JSON.parse(evt.data));
+            $scope.analystSurveys = JSON.parse(str);
             $scope.$apply();
+            oldData = str;
         };
         $scope.onclose = function () {
             console.log("connection closed");
@@ -97,7 +113,6 @@
         $http.post('@Url.Action("GetAllAnalystSurveyTypes")', { id: 1 }).then(function (res) {
             $scope.surveyTypes = res.data.surveyTypes;
             $scope.selected.surveyType = $scope.surveyTypes[0];
-
             $scope.surveyTypes.forEach(function (e) {
                 var item = res.data.analystSurveys.filter(function (e) { return e.AnalystSurveyTypeId == st.AnalystSurveyTypeId; });
                 if (item.length > 0) {
@@ -115,7 +130,7 @@
                     });
                 }
             });
-            oldString = JSON.stringify($scope.surveyTypes);
+            oldData = JSON.stringify($scope.surveyTypes);
         });
         $scope.saveAll = function () {
             $http.post('@Url.Action("SaveAnalystSurvey")', {}).then(function (res) {

@@ -773,6 +773,7 @@
     <Content Include="bower_components\startbootstrap-sb-admin-2\dist\css\sb-admin-2.css" />
     <Content Include="bower_components\startbootstrap-sb-admin-2\dist\css\timeline.css" />
     <Content Include="bower_components\startbootstrap-sb-admin-2\dist\js\sb-admin-2.js" />
+    <Content Include="Content\bootstarp-left-nav-tabs.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.def.css" />
     <Content Include="Content\bootstrap.def.min.css" />
@@ -1126,6 +1127,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.bootstrap.wizard.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
