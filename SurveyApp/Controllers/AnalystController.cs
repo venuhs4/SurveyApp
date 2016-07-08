@@ -11,13 +11,13 @@ namespace SurveyApp.Controllers
     {
         ApplicationDbContext db = new ApplicationDbContext();
         // GET: Analyst
-        [Authorize(Roles = "Analyst")]
+        [Authorize(Roles = "Analyst,Admin")]
         public ActionResult Index()
         {
             return View();
         }
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client,Admin")]
         public ActionResult ConnectToAnalyst()
         {
             return View();

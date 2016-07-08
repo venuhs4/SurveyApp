@@ -559,7 +559,6 @@
     <Content Include="bower_components\flot\examples\series-toggle\index.html" />
     <Content Include="bower_components\flot\examples\series-types\index.html" />
     <Content Include="bower_components\flot\examples\shared\jquery-ui\jquery-ui.min.css" />
-    <Content Include="bower_components\flot\examples\shared\jquery-ui\jquery-ui.min.js" />
     <Content Include="bower_components\flot\examples\stacking\index.html" />
     <Content Include="bower_components\flot\examples\symbols\index.html" />
     <Content Include="bower_components\flot\examples\threshold\index.html" />
