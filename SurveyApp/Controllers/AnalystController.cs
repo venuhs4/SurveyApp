@@ -1,4 +1,6 @@
-﻿using SurveyApp.Models;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using SurveyApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,13 @@ namespace SurveyApp.Controllers
     public class AnalystController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
         // GET: Analyst
         [Authorize(Roles = "Analyst,Admin")]
         public ActionResult Index()
@@ -41,9 +50,29 @@ namespace SurveyApp.Controllers
             return Json(new { surveyTypes, analystSurveys }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetAllUsers()
+        //public JsonResult GetAllUsers()
+        //{
+        //    if (UserManager.GetRoles(User.Identity.Name).Contains("Analyst") || UserManager.GetRoles(User.Identity.Name).Contains("Admin"))
+        //        return Json(db.Users.Select(s => s.UserName).ToList().Where(t => UserManager.GetRoles(User.Identity.Name) == ), JsonRequestBehavior.AllowGet);
+        //}
+
+        public JsonResult GetAllClients()
         {
-            return Json(db.Users.Select(s => s.UserName).ToList(), JsonRequestBehavior.AllowGet);
+            List<string> clients = new List<string>();
+            foreach (var item in db.Users.Select(s => new { s.Email, s.Id }).ToList())
+            {
+                var roles = UserManager.GetRoles(item.Id);
+                if (roles.Contains("Client"))
+                {
+                    clients.Add(item.Email);
+                }
+            }
+            return Json(clients, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllAnalysts()
+        {
+            return Json(db.Users.Select(s =>new { s.Email, s.Id }).ToList().Where(t => UserManager.GetRoles(t.Id).Contains("Analyst")).Select(s=> s.Email).ToList(), JsonRequestBehavior.AllowGet);
         }
     }
 }

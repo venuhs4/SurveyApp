@@ -29,6 +29,7 @@
                 </div>
                 <div ng-if="sd.Type == 2">
                     <div class="checkbox" ng-repeat="di in sd.DelimitedItemList">
+                        {{di}}
                         <label>
                             <input type="checkbox" ng-value="$index" ng-model="di.selected">
                             {{di.Value}}
@@ -38,35 +39,48 @@
 
             </div>
         </div>
-        <button class="btn btn-success" ng-click="submitSurvey()"></button>
+        <button class="btn btn-success" ng-click="submitSurvey()">Save Survey</button>
     </div>
 </div>
 <script>
     var app = angular.module('takeSurveyApp', []);
     app.controller('takeSurveyCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.data = {};
-        $scope.surveyId = 0;
+        $scope.surveyId = @ViewBag.id;
         $scope.serveyDetails = [];
-        $http.get('@Url.Action("GetSurveyDetails")').then(function (res) {
+        debugger;
+        $http.post('@Url.Action("GetSurveyDetails")',{id : $scope.surveyId}).then(function (res) {
             $scope.serveyDetails = res.data.surveyDetails;
-            $scope.surveyId = res.data.surveyId;
+            //$scope.surveyId = res.data.surveyId;
             $scope.serveyDetails.forEach(function (e) {
-                if (e.Type != 0) {
+                if (e.Type == 1) {
                     var copy = e.DelimitedItemList.split(';;');
                     e.DelimitedItemList = [];
-                    copy.forEach(function (v) { e.DelimitedItemList.push({ Value: v, selected: false }) });
+                    copy.forEach(function (v,i) {
+                        e.DelimitedItemList.push({ Value: v, selected: false })
+                    });
+                    e.radio = e.ans;
+                }
+                if (e.Type == 2) {
+                    var copy = e.DelimitedItemList.split(';;');
+                    e.DelimitedItemList = [];
+                    copy.forEach(function (v,i) {
+
+                        e.DelimitedItemList.push({ Value: v, selected: false })
+                    });
+                    e.ans.split(';;').forEach(function(v,i){
+                        e.DelimitedItemList[v].selected = true;
+                    });
                 }
             });
-
-            $scope.surveyId = res.data.surveyId;
         });
         $scope.submitSurvey = function () {
             var resultList = [];
             $scope.serveyDetails.forEach(function (e) {
                 switch (e.Type) {
-                    case 0: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer: e.ans });
-                        break;
-                    case 1: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer: e.radio });
+                    case 0: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyAnswerId:e.SurveyAnswerId, SurveyDetailAnswer: e.ans });
+                break;                                                 
+                    case 1: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyAnswerId:e.SurveyAnswerId, SurveyDetailAnswer: e.radio });
                         break;
                     case 2:
                         var tempSelected = [];

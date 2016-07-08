@@ -268,12 +268,25 @@
     <Compile Include="Migrations\201606300950178_added AnalystSurveyType.Designer.cs">
       <DependentUpon>201606300950178_added AnalystSurveyType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607080632450_registration changes.cs" />
+    <Compile Include="Migrations\201607080632450_registration changes.Designer.cs">
+      <DependentUpon>201607080632450_registration changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607080642476_registration changes pk.cs" />
+    <Compile Include="Migrations\201607080642476_registration changes pk.Designer.cs">
+      <DependentUpon>201607080642476_registration changes pk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607080726356_added pincode.cs" />
+    <Compile Include="Migrations\201607080726356_added pincode.Designer.cs">
+      <DependentUpon>201607080726356_added pincode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AnalystSurvey.cs" />
     <Compile Include="Models\AnalystSurveyType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SecondSurvey.cs" />
     <Compile Include="Models\Survey.cs" />
     <Compile Include="Models\SurveyAnswer.cs" />
     <Compile Include="Models\SurveyClient.cs" />
@@ -1196,10 +1209,13 @@
     <Content Include="Views\AnalystSurveyTypes\Index.cshtml" />
     <Content Include="Views\Analyst\Index.cshtml" />
     <Content Include="Views\Surveys\SecandarySurvey.cshtml" />
-    <Content Include="Views\Surveys\TakeSecandarySurvey.cshtml" />
+    <Content Include="Views\Surveys\TakeSecondarySurvey.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Role\Create.cshtml" />
     <Content Include="Views\Analyst\ConnectToAnalyst.cshtml" />
+    <Content Include="Views\Role\Edit.cshtml" />
+    <Content Include="Views\Role\ManageUserRoles.cshtml" />
+    <Content Include="Views\SurveyProctor\SelectSurvey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1257,6 +1273,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606300950178_added AnalystSurveyType.resx">
       <DependentUpon>201606300950178_added AnalystSurveyType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607080632450_registration changes.resx">
+      <DependentUpon>201607080632450_registration changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607080642476_registration changes pk.resx">
+      <DependentUpon>201607080642476_registration changes pk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607080726356_added pincode.resx">
+      <DependentUpon>201607080726356_added pincode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

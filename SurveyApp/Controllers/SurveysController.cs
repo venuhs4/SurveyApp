@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using SurveyApp.Models;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace SurveyApp.Controllers
 {
@@ -15,6 +17,25 @@ namespace SurveyApp.Controllers
     {
 
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
+        private ApplicationSignInManager _signInManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+        public ApplicationSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            }
+            private set
+            {
+                _signInManager = value;
+            }
+        }
 
         // GET: Surveys
         public ActionResult Index()
@@ -33,6 +54,7 @@ namespace SurveyApp.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult TakeInitialSurvey()
         {
             return View("TakeInitialSurvey", "_TempLayout");
@@ -75,22 +97,58 @@ namespace SurveyApp.Controllers
             return Json(new { surveyId = 1, surveyDetails }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SaveInitialSurvey(List<SurveyAnswer> list, string name, string email, string phone)
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> TakeInitialSurvey(RegisterViewModel model)
         {
-            var sr = new SurveyResult()
+            if (ModelState.IsValid)
             {
-                DateCreated = DateTime.Now,
-                EndTime = DateTime.Now,
-                StartTime = DateTime.Now,
-                SurveyId = 1
-            };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    model.Name = "Client";
+                    //Assign Role to user Here 
+                    await this.UserManager.AddToRoleAsync(user.Id, model.Name);
+                    //Ends Here
 
-            db.TSurveyResult.Add(sr);
-            db.SaveChanges();
-            list.ForEach((e) => { e.SurveyResultId = sr.SurveyResultId; });
-            db.TSurveyAnswer.AddRange(list);
-            db.SaveChanges();
-            return Json("Survey Answers saved", JsonRequestBehavior.AllowGet);
+
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    db.TSurveyClient.Add(new SurveyClient()
+                    {
+                        UserId = user.Id,
+                        Company = model.OrgName,
+                    });
+                    db.SaveChanges();
+
+                    return RedirectToAction("TakeSecondarySurvey", "Surveys");
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult TakeSecondarySurvey(SecondSurvey model)
+        {
+            if (ModelState.IsValid)
+            {
+                SurveyClient sc = db.TSurveyClient.Where(d => d.UserId ==  db.Users.Where(u=> u.Email == User.Identity.Name).FirstOrDefault().Id).FirstOrDefault();
+                if(sc!=null)
+                {
+                    sc.Address = model.Address;
+                    sc.FirstName = model.FirstName;
+                    sc.LastName = model.LastName;
+                    sc.Pincode = model.Pincode;
+                }
+                db.Entry(sc).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
 
         public JsonResult GetSecondarySurveyDetails()
@@ -229,7 +287,7 @@ namespace SurveyApp.Controllers
             }
         }
 
-        
+
 
         // GET: Surveys/Details/5
         public ActionResult Details(long? id)

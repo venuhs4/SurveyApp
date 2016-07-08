@@ -75,8 +75,7 @@
         };
         var oldData = "";
 
-        $http.get('@Url.Action("GetAllUsers")').then(function (res) {
-            console.log(res);
+        $http.get('@Url.Action("GetAllClients")').then(function (res) {
             $scope.usernames = res.data;
         });
 
