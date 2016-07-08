@@ -10,7 +10,8 @@ namespace SurveyApp.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime DateCreated { get; set; }
+        public long SurveyClientId { get; set; }
 
-        public ICollection<SurveyClient> SurveyClient { get; set; }
+        
     }
 }

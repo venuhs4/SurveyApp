@@ -81,6 +81,10 @@ namespace SurveyApp.Models
         public string ConfirmPassword { get; set; }
 
         public string Name { get; set; }
+
+        public string OrgName { get; set; }
+
+        public string Phone { get; set; }
     }
 
     public class ResetPasswordViewModel

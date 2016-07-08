@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "SelectSurvey";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <h2>SelectSurvey</h2>
+</div>
+<div>
+    <table class="table table-bordered">
+        <tbody>
+            @foreach (SelectListItem item in ViewBag.AllSurvey)
+            {
+                <tr>
+                    <td data-id="@item.Value">@item.Text</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $('tr').click(function (evt) {
+        var id = $(evt.target).attr('data-id');
+        window.location = '@Url.Action("TakeSurvey", "SurveyProctor")' + '?id=' + id;
+    });
+</script>

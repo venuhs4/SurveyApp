@@ -5,32 +5,19 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Available Roles For Application</h2>
-
-@Html.ActionLink("Create Role", "Create", "Role")
-
-<style type="text/css">
-    #tbrole, .c {
-        border: double;
-    }
-</style>
-
-<table class="table">
-    <tr>
-        <th>
-            Role Name
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
+<div class="row">
+    <h3>Available Roles For Application</h3>
+</div>
+@Html.ActionLink("Create New Role", "Create") | @Html.ActionLink("Manage User Role", "ManageUserRoles")
+<hr />
+<div>
+    @foreach (var role in Model)
     {
-        <tr>
-            <td>
-               @item.Name
-            </td>
-        </tr>
+        <p>
+            <strong>@role.Name | </strong>
+            <span onclick="return confirm('Are you sure to delete?')"><a href="/Role/Delete?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span> |
+            @Html.ActionLink("Edit", "Edit", new { roleName = @role.Name })
+        </p>
     }
-</table>
-
+</div>
 

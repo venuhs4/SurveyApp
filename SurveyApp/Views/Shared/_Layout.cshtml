@@ -87,12 +87,6 @@
                         <a href="#"><i class="fa fa-shield"></i> Survey Master<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                @Html.ActionLink("Initial Survey", "InitialSurvey", "Surveys")
-                            </li>
-                            <li>
-                                @Html.ActionLink("Secondary Survey", "SecondarySurvey", "Surveys")
-                            </li>
-                            <li>
                                 @Html.ActionLink("Create New Survey", "Create", "Surveys")
                             </li>
                             <li>
@@ -107,7 +101,7 @@
                         <a href="#"><i class="fa fa-book"></i> Survey Procton<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                @Html.ActionLink(" Take a survey", "TakeSurvey", "SurveyProctor")
+                                @Html.ActionLink(" Take a survey", "selectSurvey", "SurveyProctor")
                             </li>
                         </ul>
                     </li>
@@ -139,12 +133,18 @@
                             <li>
                                 @Html.ActionLink("Analyst Surey Types", "Index", "AnalystSurveyTypes")
                             </li>
-                            <li>
-                                @Html.ActionLink("Connect with Client", "Index", "Analyst")
-                            </li>
-                            <li>
-                                @Html.ActionLink("Connect with Analyst", "Connecttoanalyst", "Analyst")
-                            </li>
+                            @if (User.IsInRole("Analyst") || User.IsInRole("Admin"))
+                            {
+                                <li>
+                                    @Html.ActionLink("Connect with Client", "Index", "Analyst")
+                                </li>
+                            }
+                            @if (User.IsInRole("Client") || User.IsInRole("Admin"))
+                            {
+                                <li>
+                                    @Html.ActionLink("Connect with Analyst", "Connecttoanalyst", "Analyst")
+                                </li>
+                            }
                         </ul>
                     </li>
                 </ul>
@@ -163,7 +163,7 @@
     </div>
 
     <div id="alertsArea" style="position:fixed;bottom:8px;right:23px">
-        
+
     </div>
 
 

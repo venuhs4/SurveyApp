@@ -1,115 +1,52 @@
-﻿@{
-    ViewBag.Title = "Initial Survey";
+﻿@model SurveyApp.Models.RegisterViewModel
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="takeInitialSurvey" ng-controller="takeInitialSurveyCtrl">
-    <div class="row">
-        <div class="col-lg-offset-2 col-lg-8">
-            <h1 class="page-header">Initial Survey</h1>
+@using (Html.BeginForm("TakeInitialSurvey", "Surveys", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Initial Survey</h4>
+    <hr />
+    <div class="form-group">
+        <label class="control-label">What is your name/ organisation name?</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.OrgName, new { @class = "form-control" })
         </div>
-        <!-- /.col-lg-12 -->
     </div>
+    <div class="form-group">
+        <label class="control-label">What is your email address?</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">What is your Phone number?</label>
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Select the password </label>
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Repeat the password</label>
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Submit the survey" />
+        </div>
+    </div>
+    <p>*This survey will register as a client with email address as your username</p>
+}
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-2"><b>Prompt</b></div>
-            <div class="col-md-9">What is you full name?/ What is your organisation name?</div>
-            <div class="form-group">
-                <textarea class="form-control" ng-model="mandatoryData.name" rows="3"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-2"><b>Prompt</b></div>
-            <div class="col-md-9">What is your E-mail address?</div>
-            <div class="form-group">
-                <textarea class="form-control" ng-model="mandatoryData.email" rows="3"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-2"><b>Prompt</b></div>
-            <div class="col-md-9">What is your phone number?</div>
-            <div class="form-group">
-                <textarea class="form-control" ng-model="mandatoryData.phone" rows="3"></textarea>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-offset-2 col-lg-8">
-        <div class="panel panel-default" ng-repeat="sd in serveyDetails">
-            <div class="panel-body">
-                <h3>{{$index+1}}). {{sd.Prompt}}</h3>
-                <div ng-if="sd.Type == 0">
-                    <div class="form-group">
-                        <textarea class="form-control" ng-model="sd.ans" rows="3"></textarea>
-                    </div>
-                </div>
-                <div ng-if="sd.Type == 1">
-                    <div class="radio" ng-repeat="di in sd.DelimitedItemList">
-                        <label>
-                            <input name="radio" type="radio" ng-value="$index" ng-model="sd.radio">
-                            {{di.Value}}
-                        </label>
-                    </div>
-                </div>
-                <div ng-if="sd.Type == 2">
-                    <div class="checkbox" ng-repeat="di in sd.DelimitedItemList">
-                        <label>
-                            <input type="checkbox" ng-value="$index" ng-model="di.selected">
-                            {{di.Value}}
-                        </label>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <button class="btn btn-success" ng-click="submitSurvey()">Submit Survey</button>
-    </div>
-</div>
-<script>
-    var app = angular.module('takeInitialSurveyApp', []);
-    app.controller('takeInitialSurveyCtrl', ['$scope', '$http', function ($scope, $http) {
-        $scope.mandatoryData = {};
-        $scope.data = {};
-        $scope.serveyDetails = [];
-        $http.get('@Url.Action("GetInitialSurveyDetails")').then(function (res) {
-            $scope.serveyDetails = res.data.surveyDetails;
-            $scope.serveyDetails.forEach(function (e) {
-                if (e.Type != 0) {
-                    var copy = e.DelimitedItemList.split(';;');
-                    e.DelimitedItemList = [];
-                    copy.forEach(function (v) { e.DelimitedItemList.push({ Value: v, selected: false }) });
-                }
-            });
-
-            $scope.surveyId = res.data.surveyId;
-        });
-        $scope.submitSurvey = function () {
-            var resultList = [];
-            $scope.serveyDetails.forEach(function (e) {
-                switch (e.Type) {
-                    case 0: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer:e.ans });
-                        break;
-                    case 1: resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer: e.radio });
-                        break;
-                    case 2:
-                        var tempSelected = [];
-                        e.DelimitedItemList.forEach(function (a,index) {
-                            a.selected && tempSelected.push(index);
-                        });
-                        resultList.push({ SurveyDetailId: e.SurveyDetailId, SurveyDetailAnswer: tempSelected.join(";;") });
-                        break;
-                }
-            });
-            debugger;
-            $http.post('@Url.Action("SaveInitialSurvey")', { list: resultList, $scope.mandatoryData.name,$scope.mandatoryData.email, $scope.mandatoryData.phone }).then(function (res) {
-                console.log(res.data);
-            });
-        };
-    }]);
-    angular.bootstrap($('#takeInitialSurvey'), ['takeInitialSurveyApp']);
-</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
