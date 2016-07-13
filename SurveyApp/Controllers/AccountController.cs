@@ -82,7 +82,7 @@ namespace SurveyApp.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View("Login","_LayoutLogin");
+            return View("Login");
         }
 
         //
@@ -105,11 +105,15 @@ namespace SurveyApp.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
+                    ViewBag.ErrorMessage = "Lockout";
                     return View("Lockout");
+                    
                 case SignInStatus.RequiresVerification:
+                    ViewBag.ErrorMessage = "SendCode";
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
+                    ViewBag.ErrorMessage = "Invalid login attempt";
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }

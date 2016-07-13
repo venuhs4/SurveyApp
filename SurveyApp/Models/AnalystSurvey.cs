@@ -8,8 +8,7 @@ namespace SurveyApp.Models
         public long AnalystSurveyId { get; set; }
         public long ClientId { get; set; }
         public DateTime Created { get; set; }
-        public long AnalystSurveyTypeId { get; set; }
-        public string Description { get; set; }
+        public long AnalystSurveyTypeId { get; set; }   
         public string Response { get; set; }
         public string InternalNotes { get; set; }
     }

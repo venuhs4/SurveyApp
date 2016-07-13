@@ -83,56 +83,59 @@
                     <li>
                         <a href="/" class="active"><i class="fa fa-dashboard fa-fw"></i> Survey Dashboards</a>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-shield"></i> Survey Master<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                @Html.ActionLink("Create New Survey", "Create", "Surveys")
-                            </li>
-                            <li>
-                                @Html.ActionLink("All Survey", "Index", "Surveys")
-                            </li>
-                            <li>
-                                @Html.ActionLink(" All Surveys Details", "AllDetails", "Surveys")
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-book"></i> Survey Procton<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                @Html.ActionLink(" Take a survey", "selectSurvey", "SurveyProctor")
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-group"></i> Survey Groups<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                @Html.ActionLink("Create Survey Group", "CreateAll", "SurveyGroups")
-                            </li>
-                            <li>
-                                @Html.ActionLink(" All Surveys Groups", "Index", "SurveyGroups")
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-group"></i> Role<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                @Html.ActionLink("All Roles", "Index", "Role")
-                            </li>
-                            <li>
-                                @Html.ActionLink("Create new Role", "Create", "Role")
-                            </li>
-                        </ul>
-                    </li>
+                    @*<li>
+                            <a href="#"><i class="fa fa-shield"></i> Survey Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    @Html.ActionLink("Create New Survey", "Create", "Surveys")
+                                </li>
+                                <li>
+                                    @Html.ActionLink("All Survey", "Index", "Surveys")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(" All Surveys Details", "AllDetails", "Surveys")
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-book"></i> Survey Procton<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    @Html.ActionLink(" Take a survey", "selectSurvey", "SurveyProctor")
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-group"></i> Survey Groups<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    @Html.ActionLink("Create Survey Group", "CreateAll", "SurveyGroups")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(" All Surveys Groups", "Index", "SurveyGroups")
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-group"></i> Role<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    @Html.ActionLink("All Roles", "Index", "Role")
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Create new Role", "Create", "Role")
+                                </li>
+                            </ul>
+                        </li>*@
                     <li>
                         <a href="#"><i class="fa fa-group"></i>Analyst<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
-                                @Html.ActionLink("Analyst Modules", "Index", "AnalystSurveyTypes")
-                            </li>
+                            @if (User.IsInRole("Analyst") || User.IsInRole("Admin"))
+                            {
+                                <li>
+                                    @Html.ActionLink("Analyst Modules", "Index", "AnalystSurveyTypes")
+                                </li>
+                            }
                             @if (User.IsInRole("Analyst") || User.IsInRole("Admin"))
                             {
                                 <li>

@@ -8,34 +8,24 @@
     <h4>Initial Survey</h4>
     <hr />
     <div class="form-group">
-        <label class="control-label">What is your first name?</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-        </div>
+        <label>What is your first name?</label>
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label class="control-label">What is your last name?</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-        </div>
+        <label>What is your last name?</label>
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label class="control-label">What is your Address?</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-        </div>
+        <label>What is your Address?</label>
+        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label class="control-label">Provide your Pincode</label>
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Pincode, new { @class = "form-control" })
-        </div>
+        <label>Provide your Pincode</label>
+        @Html.TextBoxFor(m => m.Pincode, new { @class = "form-control" })
     </div>
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Submit the survey" />
-        </div>
+        <input type="submit" class="btn btn-default" value="Submit the survey" />
     </div>
 }
 

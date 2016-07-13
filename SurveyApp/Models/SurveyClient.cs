@@ -11,6 +11,7 @@ namespace SurveyApp.Models
         public string Company { get; set; }
         public string Address { get; set; }
         public string Pincode { get; set; }
+        public string AnalystId { get; set; }
 
         //public ICollection<SurveyResult> SurveyResult { get; set; }
     }

@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace SurveyApp.Controllers
 {
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         ApplicationDbContext context;
         private ApplicationUserManager _userManager;

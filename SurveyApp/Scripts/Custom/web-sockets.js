@@ -1,14 +1,17 @@
-﻿wsConnect = function (from, to,onconnect) {
+﻿//var hostIP = "166.62.35.239";
+var hostIP = "localhost";
+wsConnect = function (from, to,data, onconnect) {
+    debugger;   
     console.log(from, to);
     var ws = {};
     if ("WebSocket" in window) {
-        ws = new WebSocket("ws://166.62.35.239:8001");
+        ws = new WebSocket("ws://" + hostIP + ":8001");
         ws.onopen = function () {
             console.log("connected to server..");
-            var obj = { from, to };
+            var obj = { from, to, data };
+            onconnect();
             ws.send(JSON.stringify(obj));
             console.log("connection between " + from + " and " + to + " is established.");
-            onconnect();
         };
        
         return ws;

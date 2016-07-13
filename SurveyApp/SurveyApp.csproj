@@ -212,6 +212,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Alerts.cs" />
+    <Compile Include="Helpers\MailHelper.cs" />
     <Compile Include="Migrations\201606200706369_InitialCreate.cs" />
     <Compile Include="Migrations\201606200706369_InitialCreate.Designer.cs">
       <DependentUpon>201606200706369_InitialCreate.cs</DependentUpon>
@@ -279,6 +280,14 @@
     <Compile Include="Migrations\201607080726356_added pincode.cs" />
     <Compile Include="Migrations\201607080726356_added pincode.Designer.cs">
       <DependentUpon>201607080726356_added pincode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607111020456_added analyst Id to client.cs" />
+    <Compile Include="Migrations\201607111020456_added analyst Id to client.Designer.cs">
+      <DependentUpon>201607111020456_added analyst Id to client.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607111048130_removed description from Anayst survey.cs" />
+    <Compile Include="Migrations\201607111048130_removed description from Anayst survey.Designer.cs">
+      <DependentUpon>201607111048130_removed description from Anayst survey.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1217,6 +1226,8 @@
     <Content Include="Views\Role\Edit.cshtml" />
     <Content Include="Views\Role\ManageUserRoles.cshtml" />
     <Content Include="Views\SurveyProctor\SelectSurvey.cshtml" />
+    <Content Include="Views\Surveys\AfterInitialSurvey.cshtml" />
+    <Content Include="Views\Analyst\ClientModuleResponse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1283,6 +1294,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607080726356_added pincode.resx">
       <DependentUpon>201607080726356_added pincode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607111020456_added analyst Id to client.resx">
+      <DependentUpon>201607111020456_added analyst Id to client.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607111048130_removed description from Anayst survey.resx">
+      <DependentUpon>201607111048130_removed description from Anayst survey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

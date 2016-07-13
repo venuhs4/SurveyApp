@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace SurveyApp.Controllers
 {
+    [Authorize]
     public class BaseController : Controller
     {
         public static ApplicationUser GetLoggedInUser()
