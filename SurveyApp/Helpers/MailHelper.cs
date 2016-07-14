@@ -15,13 +15,13 @@ namespace SurveyApp.Helpers
                 MailMessage mail = new MailMessage();
                 SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
-                mail.From = new MailAddress("venu.p@dhruvts.com");
+                mail.From = new MailAddress("SmartPropz@gmail.com");
                 mail.To.Add(toMail);
                 mail.Subject = subject;
                 mail.Body = text;
 
                 SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("venu.p@dhruvts.com", "suchitha");
+                SmtpServer.Credentials = new System.Net.NetworkCredential("SmartPropz@gmail.com", "SurveyMania77");
                 SmtpServer.EnableSsl = true;
 
                 SmtpServer.Send(mail);
