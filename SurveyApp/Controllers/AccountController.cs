@@ -104,11 +104,11 @@ namespace SurveyApp.Controllers
                 var userRoles = UserManager.GetRoles(user.Id);
                 if (userRoles.Contains("Client"))
                 {
-                    returnUrl = "/analyst/ConnectToAnalyst";
+                    returnUrl = Request.Url.Authority+"/analyst/ConnectToAnalyst";
                 }
                 else if(userRoles.Contains("Analyst"))
                 {
-                    returnUrl = "/analyst/Index";
+                    returnUrl = Request.Url.Authority+"/analyst/Index";
                 }
 
             }
