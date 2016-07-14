@@ -44,7 +44,6 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary" ng-click="saveAll()">Save changes</button>
             </div>
         </div>
     </div>
@@ -58,11 +57,24 @@
         $http.post('@Url.Action("GetClientModule")', { client:$scope.client }).then(function (res) {
             $scope.surveyModules = res.data;
         });
+
+        var saveTimeout = null;
+        $scope.$watch('surveyModules', function (newVal, oldVal) {
+            debugger;
+            if (!!saveTimeout) {
+                clearInterval(saveTimeout);
+            }
+            saveTimeout = setTimeout(function () {
+                $scope.saveAll();
+            }, 4000);
+        }, true);
+
         $scope.saveAll = function () {
             $http.post('@Url.Action("SaveAnalystSurvey")', { surveyModules: $scope.surveyModules, }).then(function (res) {
                 res.data.forEach(function (m, i) {
                     $scope.surveyModules[i].AnalystSurveyId = m.AnalystSurveyId;
                 });
+                successAlert("Changes saved..", 2000);
             });
         };
 

@@ -43,7 +43,7 @@ namespace SurveyApp
                 "~/bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      //"~/Content/bootstrap.css",
+                      "~/Content/bootstrap.css",
                       "~/Content/site.css"));
         }
     }

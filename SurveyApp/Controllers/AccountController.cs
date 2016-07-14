@@ -81,6 +81,7 @@ namespace SurveyApp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            
             ViewBag.ReturnUrl = returnUrl;
             return View("Login");
         }
@@ -95,6 +96,21 @@ namespace SurveyApp.Controllers
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            var user = context.Users.Where(u => u.UserName == model.Email).FirstOrDefault();
+            if(user!=null)
+            {
+                var userRoles = UserManager.GetRoles(user.Id);
+                if (userRoles.Contains("Client"))
+                {
+                    returnUrl = "/analyst/ConnectToAnalyst";
+                }
+                else if(userRoles.Contains("Analyst"))
+                {
+                    returnUrl = "/analyst/Index";
+                }
+
             }
 
             // This doesn't count login failures towards account lockout

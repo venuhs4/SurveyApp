@@ -2,31 +2,60 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="col-md-12">
-    @using (Html.BeginForm("TakeInitialSurvey", "Surveys", FormMethod.Post, new { @class = "form-horizontal col-md-5", role = "form" }))
+<div class="col-md-12" id="initailSurveyDiv" ng-controller="initialSurveyCtrl">
+    @using (Html.BeginForm("TakeInitialSurvey", "Surveys", FormMethod.Post, new { @class = "form form-horizontal col-md-5", role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Initial Survey</h4>
-        <hr />
-        <div class="form-group">
-            <label>What is your name/ organisation name?</label>
-            @Html.TextBoxFor(m => m.OrgName, new { @class = "form-control" })
+        <div class="page-header">
+            <h1>Initial Survey <small></small></h1>
         </div>
-        <div class="form-group">
-            <label>What is your email address?</label>
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        </div>
-        <div class="form-group">
-            <label>What is your Phone number?</label>
-            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
-        </div>
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="form-group">
-            <input type="submit" class="btn btn-default" value="Submit the survey" />
-        </div>
+            <div class="form-group">
+                <label>What is your email address?</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            </div>
+            <span ng-show="data.emailExists" class="text-danger">Email already registered... please proceed for <a href="@Url.Action("login", "Account")">login</a></span>
+            <div class="form-group">
+                <label>What is your name/ organisation name?</label>
+                @Html.TextBoxFor(m => m.OrgName, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label>What is your Phone number?</label>
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+            </div>
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-group">
+                <input type="submit" ng-disabled="data.emailExists" class="btn btn-default" value="Submit the survey" />
+            </div>
     }
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
     }
 </div>
+<script>
+
+    angular.module('initialSurveyApp', [])
+        .controller('initialSurveyCtrl', ['$scope', '$http', function ($scope, $http) {
+            $scope.data = {
+                emailExists: false
+            };
+            $('#Email').on('focusout', function () {
+                debugger;
+                if (!!$('#Email').val()) {
+                    $http.post('@Url.Action("ValidateEmail")', { email: $('#Email').val() }).success(function (data) {
+                        $scope.data.emailExists = data.emailExists;
+                    });
+                }
+            });
+            $('.form').submit(function (data, asa) {
+                debugger;
+                if ($scope.data.emailExists)
+                    data.preventDefault();
+            });
+        }]);
+    angular.bootstrap($('#initailSurveyDiv'), ['initialSurveyApp']);
+
+    $(document).ready(function (e) {
+
+    });
+</script>

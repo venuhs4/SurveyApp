@@ -317,8 +317,18 @@ Please start interacting with the Analyst, follow the link to start, http://166.
                 return Json(groups, JsonRequestBehavior.AllowGet);
             }
         }
-
-
+        [AllowAnonymous]
+        public JsonResult ValidateEmail(string email)
+        {
+            if(db.Users.Any(w=> w.UserName == email))
+            {
+                return Json(new { emailExists = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { emailExists = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         // GET: Surveys/Details/5
         public ActionResult Details(long? id)

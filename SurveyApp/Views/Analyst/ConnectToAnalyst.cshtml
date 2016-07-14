@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "ConnectToAnalyst";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_TempLayout.cshtml";
 }
 <script src="~/Scripts/Custom/web-sockets.js"></script>
 <link href="~/Content/bootstarp-left-nav-tabs.css" rel="stylesheet" />
@@ -37,12 +37,8 @@
                             </div>
                         </div>
                     </div>
-                    <br/>
-                    <div class="col-lg-12">
-                        <button class="btn btn-primary" ng-click="saveAll()">Save changes</button>
-                    </div>
+                    <br />
                 </div>
-
             </div>
         </div>
     </div>
@@ -52,17 +48,30 @@
     app.controller('connectToAnalystCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.selected = {};
         $scope.client = '@ViewBag.client';
-
-        debugger;
+        $scope.surveyModules = [];
+        $scope.oldSurveyModules = []
         $http.post('@Url.Action("GetClientModule")', { client: $scope.client }).then(function (res) {
             $scope.surveyModules = res.data;
+            $scope.oldSurveyModules = JSON.parse(JSON.stringify($scope.surveyModules));
         });
+
+        var saveTimeout = null;
+        $scope.$watch('surveyModules', function (newVal, oldVal) {  
+            debugger;
+            if (!!saveTimeout) {
+                clearInterval(saveTimeout);
+            }
+            saveTimeout = setTimeout(function () {
+                $scope.saveAll();
+            }, 4000);
+        }, true);
+
         $scope.saveAll = function () {
             $http.post('@Url.Action("SaveAnalystSurvey")', { surveyModules: $scope.surveyModules, }).then(function (res) {
                 res.data.forEach(function (m, i) {
                     $scope.surveyModules[i].AnalystSurveyId = m.AnalystSurveyId;
                 });
-                successAlert("Changes saved..", 3000);
+                successAlert("Changes saved..", 2000);
             });
         };
     }]);

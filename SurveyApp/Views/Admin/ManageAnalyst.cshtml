@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "ManageAnalyst";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <h2>Manage Analyst</h2>
+</div>
+<div id="manageAnalystDiv" ng-controller="manageAnalystCtrl">
+    
+</div>
+<script>
+    angular.module('manageAnalystApp', [])
+    .controller('manageAnalystCtrl', ['$scope', '$http', function ($scope, $http) {
+        console.log('admin');
+
+    }]);
+    angular.bootstrap($('#manageAnalystDiv'), ['manageAnalystApp']);
+</script>
