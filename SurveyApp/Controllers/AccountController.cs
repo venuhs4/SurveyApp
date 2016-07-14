@@ -104,11 +104,15 @@ namespace SurveyApp.Controllers
                 var userRoles = UserManager.GetRoles(user.Id);
                 if (userRoles.Contains("Client"))
                 {
-                    returnUrl = Request.Url.Authority+"/analyst/ConnectToAnalyst";
+                    returnUrl = "ConnectToAnalyst";
                 }
                 else if(userRoles.Contains("Analyst"))
                 {
-                    returnUrl = Request.Url.Authority+"/analyst/Index";
+                    returnUrl ="Index";
+                }
+                else
+                {
+                    returnUrl = "Index";
                 }
 
             }
@@ -119,7 +123,7 @@ namespace SurveyApp.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(returnUrl,"Analyst");
                 case SignInStatus.LockedOut:
                     ViewBag.ErrorMessage = "Lockout";
                     return View("Lockout");
