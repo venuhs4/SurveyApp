@@ -45,7 +45,7 @@ namespace SurveyApp.Controllers
             return null;
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -57,9 +57,9 @@ namespace SurveyApp.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -81,7 +81,7 @@ namespace SurveyApp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            
+
             ViewBag.ReturnUrl = returnUrl;
             return View("Login");
         }
@@ -93,22 +93,35 @@ namespace SurveyApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            var controller = "Analyst";
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
             var user = context.Users.Where(u => u.UserName == model.Email).FirstOrDefault();
-            if(user!=null)
+            if (user != null)
             {
                 var userRoles = UserManager.GetRoles(user.Id);
                 if (userRoles.Contains("Client"))
                 {
-                    returnUrl = "ConnectToAnalyst";
+                    var client = context.TSurveyClient.Where(w => w.UserId == user.Id).FirstOrDefault();
+                    if (client != null)
+                    {
+                        if (string.IsNullOrWhiteSpace(client.AnalystId))
+                        {
+                            returnUrl = "TakeSecondarySurvey";
+                            controller = "Surveys";
+                        }
+                        else
+                        {
+                            returnUrl = "ConnectToAnalyst";
+                        }
+                    }
                 }
-                else if(userRoles.Contains("Analyst"))
+                else if (userRoles.Contains("Analyst"))
                 {
-                    returnUrl ="Index";
+                    returnUrl = "Index";
                 }
                 else
                 {
@@ -123,11 +136,11 @@ namespace SurveyApp.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction(returnUrl,"Analyst");
+                    return RedirectToAction(returnUrl, controller);
                 case SignInStatus.LockedOut:
                     ViewBag.ErrorMessage = "Lockout";
                     return View("Lockout");
-                    
+
                 case SignInStatus.RequiresVerification:
                     ViewBag.ErrorMessage = "SendCode";
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
@@ -168,7 +181,7 @@ namespace SurveyApp.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
