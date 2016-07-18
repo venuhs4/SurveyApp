@@ -1,4 +1,4 @@
-﻿//var hostIP = "166.62.35.239";
+﻿//var hostIP = "primum.mobi";
 var hostIP = "localhost";
 wsConnect = function (from, to,data, onconnect) {
     debugger;   

@@ -88,7 +88,7 @@ namespace SurveyApp.Controllers
         }
 
         [Authorize(Roles = "Client,Admin")]
-        public ActionResult ConnectToAnalyst()
+        public ActionResult AnalysisSurvey()
         {
             ViewBag.client = (from u in db.Users
                               join c in db.TSurveyClient on u.Id equals c.UserId

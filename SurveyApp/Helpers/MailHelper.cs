@@ -20,6 +20,7 @@ namespace SurveyApp.Helpers
                 mail.Subject = subject;
                 mail.Body = text;
 
+                
                 SmtpServer.Port = 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential("SmartPropz@gmail.com", "SurveyMania77");
                 SmtpServer.EnableSsl = true;

@@ -117,7 +117,7 @@ namespace SurveyApp.Controllers
 Username:{0}
 Password:{1}
 
-follow the link to head to second survey, http://166.62.35.239/surveyapp/surveys/takesecondarysurvey",model.Email,"Survey@123"));
+follow the link to head to second survey, http://primum.mobi/surveyapp/surveys/takesecondarysurvey",model.Email,"Survey@123"));
                 var result = await UserManager.CreateAsync(user, "Survey@123");
                 if (result.Succeeded)
                 {
@@ -162,7 +162,7 @@ follow the link to head to second survey, http://166.62.35.239/surveyapp/surveys
 
                 MailHelper.SendMail(User.Identity.Name, "Welcome from Survey App", string.Format(@"Welcome to survey application...
 
-Please start interacting with the Analyst, follow the link to start, http://166.62.35.239/surveyapp/Analyst/ConnectToAnalyst"));
+Please start interacting with the Analyst, follow the link to start, http://primum.mobi/surveyapp/Analyst/AnalysisSurvey"));
 
                 
 
