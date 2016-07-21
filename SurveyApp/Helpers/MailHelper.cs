@@ -13,17 +13,21 @@ namespace SurveyApp.Helpers
             try
             {
                 MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                SmtpClient SmtpServer = new SmtpClient(); // "smtp.gmail.com");
+                SmtpServer.Host = "relay-hosting.secureserver.net";
+                SmtpServer.Port = 25;
 
-                mail.From = new MailAddress("SmartPropz@gmail.com");
+                mail.From = new MailAddress("survey@primum.mobi");
                 mail.To.Add(toMail);
                 mail.Subject = subject;
                 mail.Body = text;
 
-                
-                SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("SmartPropz@gmail.com", "SurveyMania77");
-                SmtpServer.EnableSsl = true;
+                //SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
+                //SmtpServer.Port = 587;
+                //SmtpServer.Timeout = 120;
+                //SmtpServer.Credentials = new System.Net.NetworkCredential("SmartPropz@gmail.com", "SurveyMania77");
+                //SmtpServer.UseDefaultCredentials = true;
+                //SmtpServer.EnableSsl = true;
 
                 SmtpServer.Send(mail);
                 return true;

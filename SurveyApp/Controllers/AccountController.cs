@@ -25,7 +25,7 @@ namespace SurveyApp.Controllers
             context = new ApplicationDbContext();
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public ActionResult Register()
         {
             var allRoles = context.Roles.Select(f => new SelectListItem
@@ -115,7 +115,7 @@ namespace SurveyApp.Controllers
                         }
                         else
                         {
-                            returnUrl = "ConnectToAnalyst";
+                            returnUrl = "AnalysisSurvey";
                         }
                     }
                 }
@@ -198,12 +198,19 @@ namespace SurveyApp.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var allRoles = context.Roles.Select(f => new SelectListItem
+                {
+                    Value = f.Name,
+                    Text = f.Name
+                });
+
+                ViewBag.Name = allRoles;
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -214,19 +221,13 @@ namespace SurveyApp.Controllers
                     //Ends Here
 
 
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    return RedirectToAction("Index", "Home");
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    ViewBag.StatusMessage = "Registration Success. New user " + model.Email + " created.";
+                    return View();
                 }
                 AddErrors(result);
             }
-            var allRoles = context.Roles.Select(f => new SelectListItem
-            {
-                Value = f.Name,
-                Text = f.Name
-            });
-
-            ViewBag.Name = allRoles;
+           
             // If we got this far, something failed, redisplay form
             return View(model);
         }

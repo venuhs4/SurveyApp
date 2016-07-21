@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "ManageClient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <h2>Manage Client</h2>
+</div>
+<div id="manageClientDiv" ng-controller="manageClientCtrl">
+    <table class="table table-bordered">
+        <tr>
+            <td>Clients</td>
+            <td>Assigned Analyst</td>
+            <td>Actions</td>
+        </tr>
+        <tr ng-repeat="a in clients">
+            <td>{{a.UserName}}</td>
+            <td>
+                <select class="form-control" ng-options="c.UserName as c.UserName for c in analysts" ng-model="a.AnalystId" ng-change="analystChanged(a)"></select>
+            </td>
+            <td>
+                <button class="btn btn-danger" ng-init="delete = 'Delete'" ng-click="delete == 'Delete'? delete = 'Sure': deleteClient(a.Id)">{{delete}}</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    angular.module('manageClientApp', [])
+    .controller('manageClientCtrl', ['$scope', '$http', function ($scope, $http) {
+        $scope.clients = [];
+        $http.get('@Url.Action("GetAllClient")').success(function (data) {
+            console.log(data);
+            $scope.analysts = data.analysts;
+            $scope.clients = data.clients;
+        });
+        $scope.deleteClient = function (id) {
+            $http.post('@Url.Action("DeleteClient")', { id: id }).success(function (data) {
+                successAlert(data.Message);
+                if (data.Status == 0) {
+                    $scope.clients = data.clients;
+                }
+            });
+        };
+        $scope.analystChanged = function (a) {
+            $http.post('@Url.Action("AnalystChanged")', { UserId: a.Id, AnalystId: a.AnalystId }).success(function (data) {
+                successAlert(data.Message);
+            });
+        }
+    }]);
+    angular.bootstrap($('#manageClientDiv'), ['manageClientApp']);
+</script>

@@ -7,13 +7,86 @@
     <h2>Manage Analyst</h2>
 </div>
 <div id="manageAnalystDiv" ng-controller="manageAnalystCtrl">
-    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Analyst</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="a in analysts">
+                <td>{{a.UserName}}</td>
+                <td>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#deleteModel" ng-click="showAnalystDetails(a)">Show and Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="deleteModel" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Analyst Details</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>{{selected.analyst.UserName}}</h3>
+                    <p> Following clients are still connected to this Analyst</p>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td>User Name</td>
+                                <td>Email</td>
+                                <td>Select new analyst</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="a in clients">
+                                <td>{{a.UserName}}</td>
+                                <td>{{a.Email}}</td>
+                                <td><select class="form-control" ng-options="aa.UserName as aa.UserName for aa in altAnalysts" ng-model="a.AnalystId"></select></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="deleteAnalyst()">Delete Confirm</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 <script>
     angular.module('manageAnalystApp', [])
     .controller('manageAnalystCtrl', ['$scope', '$http', function ($scope, $http) {
-        console.log('admin');
-
+        $scope.analysts = [];
+        $scope.selected = {
+            analyst: {}
+        }
+        $http.get('@Url.Action("GetAllAnalyst")').success(function (data) {
+            console.log(data);
+            $scope.analysts = data;
+        });
+        $scope.deleteAnalyst = function () {
+            $http.post('@Url.Action("DeleteAnalyst")', { id: $scope.selected.analyst.Id, clients: $scope.clients }).success(function (data) {
+                successAlert(data.Message);
+                if (data.Status == 0) {
+                    $scope.analysts = data.Analysts;
+                }
+            });
+        };
+        $scope.showAnalystDetails = function (analyst) {
+            $scope.selected.analyst = analyst;
+            $scope.altAnalysts = $scope.analysts.filter(function (e) { return e.Id != analyst.Id; });
+            $http.post('@Url.Action("GetClientForAnalyst")', { id: analyst.Id }).success(function (data) {
+                $scope.clients = data;
+            });
+        };
     }]);
     angular.bootstrap($('#manageAnalystDiv'), ['manageAnalystApp']);
 </script>

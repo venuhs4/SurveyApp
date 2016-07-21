@@ -24,18 +24,36 @@ namespace SurveyApp.Controllers
         [Authorize(Roles = "Analyst,Admin")]
         public ActionResult Index()
         {
-            var clients = (from c in db.TSurveyClient
-                           join u in db.Users on c.UserId equals u.Id
-                           where c.AnalystId == User.Identity.Name
-                           select new { c.SurveyClientId, u.Email }).ToList();
-
-            Dictionary<long, string> clientsDict = new Dictionary<long, string>();
-            clients.ForEach((e) =>
+            if (User.IsInRole("Admin"))
             {
-                clientsDict.Add(e.SurveyClientId, e.Email);
-            });
+                var clients = (from c in db.TSurveyClient
+                               join u in db.Users on c.UserId equals u.Id
+                               select new { c.SurveyClientId, u.Email }).ToList();
 
-            ViewBag.clients = clientsDict;
+                Dictionary<long, string> clientsDict = new Dictionary<long, string>();
+                clients.ForEach((e) =>
+                {
+                    clientsDict.Add(e.SurveyClientId, e.Email);
+                });
+
+                ViewBag.clients = clientsDict;
+
+            }
+            else
+            {
+                var clients = (from c in db.TSurveyClient
+                               join u in db.Users on c.UserId equals u.Id
+                               where c.AnalystId == User.Identity.Name
+                               select new { c.SurveyClientId, u.Email }).ToList();
+
+                Dictionary<long, string> clientsDict = new Dictionary<long, string>();
+                clients.ForEach((e) =>
+                {
+                    clientsDict.Add(e.SurveyClientId, e.Email);
+                });
+
+                ViewBag.clients = clientsDict;
+            }
             return View();
         }
 
@@ -87,7 +105,7 @@ namespace SurveyApp.Controllers
             return Json(surveyModules, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "Client,Admin")]
+        [Authorize(Roles = "Client")]
         public ActionResult AnalysisSurvey()
         {
             ViewBag.client = (from u in db.Users

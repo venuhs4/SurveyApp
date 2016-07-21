@@ -1241,6 +1241,7 @@
     <Content Include="Views\Surveys\AfterInitialSurvey.cshtml" />
     <Content Include="Views\Analyst\ClientModuleResponse.cshtml" />
     <Content Include="Views\Admin\ManageAnalyst.cshtml" />
+    <Content Include="Views\Admin\ManageClient.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

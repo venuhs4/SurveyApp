@@ -63,7 +63,8 @@ namespace SurveyApp.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult AfterInitialSurvey() {
+        public ActionResult AfterInitialSurvey()
+        {
             return View();
         }
 
@@ -111,34 +112,42 @@ namespace SurveyApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                MailHelper.SendMail(model.Email,"Survey App Login details", string.Format(@"Survey app login is initiated from this mail. Please use the following login details for this mail ID.
+                try
+                {
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    MailHelper.SendMail(model.Email, "Survey App Login details", string.Format(@"Survey app login is initiated from this mail. Please use the following login details for this mail ID.
                     
 Username:{0}
 Password:{1}
 
-follow the link to head to second survey, http://primum.mobi/surveyapp/surveys/takesecondarysurvey",model.Email,"Survey@123"));
-                var result = await UserManager.CreateAsync(user, "Survey@123");
-                if (result.Succeeded)
-                {
-                    model.Name = "Client";
-                    //Assign Role to user Here 
-                    await this.UserManager.AddToRoleAsync(user.Id, model.Name);
-                    //Ends Here
-
-                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    db.TSurveyClient.Add(new SurveyClient()
+follow the link to head to second survey, http://primum.mobi/surveyapp/surveys/takesecondarysurvey", model.Email, "Survey@123"));
+                    var result = await UserManager.CreateAsync(user, "Survey@123");
+                    if (result.Succeeded)
                     {
-                        UserId = user.Id,
-                        Company = model.OrgName,
-                    });
-                    db.SaveChanges();
+                        model.Name = "Client";
+                        //Assign Role to user Here 
+                        await this.UserManager.AddToRoleAsync(user.Id, model.Name);
+                        //Ends Here
 
-                    //return RedirectToAction("TakeSecondarySurvey", "Surveys");
-                    return RedirectToAction("AfterInitialSurvey", "Surveys");
+                        //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        db.TSurveyClient.Add(new SurveyClient()
+                        {
+                            UserId = user.Id,
+                            Company = model.OrgName,
+                        });
+                        db.SaveChanges();
+
+                        //return RedirectToAction("TakeSecondarySurvey", "Surveys");
+                        return RedirectToAction("AfterInitialSurvey", "Surveys");
+                    }
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Exe = e.ToString();
                 }
             }
+           
             return View(model);
         }
 
@@ -164,10 +173,10 @@ follow the link to head to second survey, http://primum.mobi/surveyapp/surveys/t
 
 Please start interacting with the Analyst, follow the link to start, http://primum.mobi/surveyapp/Analyst/AnalysisSurvey"));
 
-                
 
-                SurveyClient sc = db.TSurveyClient.Where(d => d.UserId ==  db.Users.Where(u=> u.Email == User.Identity.Name).FirstOrDefault().Id).FirstOrDefault();
-                if(sc!=null)
+
+                SurveyClient sc = db.TSurveyClient.Where(d => d.UserId == db.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().Id).FirstOrDefault();
+                if (sc != null)
                 {
                     sc.Address = model.Address;
                     sc.FirstName = model.FirstName;
@@ -177,7 +186,7 @@ Please start interacting with the Analyst, follow the link to start, http://prim
                 }
                 db.Entry(sc).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("ConnectToAnalyst", "Analyst");
+                return RedirectToAction("AnalysisSurvey", "Analyst");
             }
             return View(model);
         }
@@ -320,7 +329,7 @@ Please start interacting with the Analyst, follow the link to start, http://prim
         [AllowAnonymous]
         public JsonResult ValidateEmail(string email)
         {
-            if(db.Users.Any(w=> w.UserName == email))
+            if (db.Users.Any(w => w.UserName == email))
             {
                 return Json(new { emailExists = true }, JsonRequestBehavior.AllowGet);
             }
